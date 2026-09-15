@@ -1,0 +1,7 @@
+title: Workato Builders Guide
+description: A guide for building on Workato
+baseurl: "/builders-guide"
+url: "https://workato-devs.github.io"
+
+# Build settings
+theme: minima
