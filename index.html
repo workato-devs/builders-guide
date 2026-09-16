@@ -1,0 +1,1395 @@
+---
+layout: null
+render_with_liquid: false
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WOW 2026 Builder Guide — Workato</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ──────────────────────────────────────────────────────────────
+   WORKATO BRAND PALETTE (official — from BrandColors_RGB.ai)
+   Hero Teal #67EADD · Dark Teal #21DBC8 · Dark Blue #083763
+   Royal Blue #1D60CA · Medium Blue #2FD4FF · Orange Creamsicle #FC9867
+   Red #F00000 (used sparingly/semantically only)
+   ────────────────────────────────────────────────────────────── */
+      :root {
+        --teal: #67eadd;
+        --teal-dark: #21dbc8;
+        --dark-blue: #0e2c50;
+        --deep-blue: #062845;
+        --card-blue: #0c4070;
+        --card-blue-soft: rgba(255, 255, 255, 0.05);
+        --card-line: rgba(255, 255, 255, 0.13);
+        --orange: #fc9867;
+        --orange-deep: #ff5506;
+        --pink: #ef80e3;
+        --lilac: #c3a9ff;
+        --gold: #ffca00;
+        --red: #f00000;
+        --ink-soft: #c9ddef;
+        --ink-faint: #9fc4dd;
+        --font-display: "Besley", Georgia, serif;
+        --font-body:
+          "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
+          sans-serif;
+        /* standard Wolf2 breakpoint/grid system — see breakpoints-and-grid.md */
+        --max-w: 1438px;
+      }
+      /* Desktop 1440+: 1438 · Responsive 1150-1439: 1140 · Compact 960-1149: 946 · Tablet/Mobile <960: fluid */
+      @media (max-width: 1439px) {
+        :root {
+          --max-w: 1140px;
+        }
+      }
+      @media (max-width: 1149px) {
+        :root {
+          --max-w: 946px;
+        }
+      }
+      @media (max-width: 959px) {
+        :root {
+          --max-w: 100%;
+        }
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: var(--font-body);
+        background: var(--dark-blue);
+        color: #fff;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      .container {
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      h1,
+      h2 {
+        font-family: var(--font-display);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      h3 {
+        font-family: var(--font-body);
+        font-weight: 600;
+      }
+
+      /* NAV — the divider line lives on the full-width wrapper so it spans edge
+   to edge, while nav itself stays aligned to the standard container width */
+      .nav-band {
+        border-bottom: 1px solid var(--teal);
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 32px 0 24px;
+      }
+      nav .wk-logo {
+        height: 22px;
+        width: auto;
+        display: block;
+      }
+
+      /* HERO BAND — full-bleed Vegas skyline artwork behind the page title. The
+   box always sits near the top (align-items:flex-start) rather than
+   toggling to centered at a breakpoint — no jump. Padding and
+   background-size are both fluid (clamp/calc against viewport width)
+   instead of switching between two fixed states, so there's a smooth
+   transition through the in-between "small tablet" widths instead of a
+   snap at one exact pixel.
+     background-size: exactly 125% (of band width) below ~480px, tapers
+   linearly down to exactly 100% at ~960px and holds there — so the crop
+   amount "scales out" gradually as the viewport widens, bottoming out at
+   no crop once there's enough room, same end states as before, just no
+   longer a hard switch. */
+      .hero-band {
+        position: relative;
+        min-height: 50vh;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        background-color: var(--dark-blue);
+        background-image: url("src/hero-vegas-blue-fill.svg");
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        background-size: clamp(100vw, calc(75vw + 240px), 125vw) auto;
+        padding: clamp(32px, 6vw, 64px) clamp(20px, 5vw, 48px)
+          clamp(32px, 6vw, 64px);
+      }
+
+      /* Outer frame + inner box give a double-stroke picture-frame look — two
+   concentric rings with a solid dark-blue fill in the gap between them
+   (a plain outline can't be filled, since it paints over whatever sits
+   behind the box, so this uses two real nested boxes instead). */
+      .hero-box-frame {
+        max-width: 764px;
+        width: 100%;
+        margin: 0 auto;
+        background: var(--dark-blue);
+        border: 2px solid var(--gold);
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow:
+          0 0 12px rgba(255, 202, 0, 0.6),
+          0 0 26px rgba(255, 202, 0, 0.3);
+      }
+      /* Marching-ants border — chasing dashes around the perimeter, like a
+   theater/marquee sign. Border is transparent (kept only to hold the box
+   model's spacing); the dashes are 4 repeating-linear-gradient layers,
+   one per edge, each animated by shifting background-position one dash
+   cycle (20px) in the clockwise direction. */
+      .hero-box {
+        position: relative;
+        background-color: var(--dark-blue);
+        border: 3px solid transparent;
+        border-radius: 14px;
+        padding: 28px 24px;
+        text-align: center;
+        background-image:
+          repeating-linear-gradient(
+            to right,
+            var(--lilac) 0 10px,
+            transparent 10px 20px
+          ),
+          repeating-linear-gradient(
+            to bottom,
+            var(--lilac) 0 10px,
+            transparent 10px 20px
+          ),
+          repeating-linear-gradient(
+            to right,
+            var(--lilac) 0 10px,
+            transparent 10px 20px
+          ),
+          repeating-linear-gradient(
+            to bottom,
+            var(--lilac) 0 10px,
+            transparent 10px 20px
+          );
+        background-position:
+          0 0,
+          100% 0,
+          0 100%,
+          0 0;
+        background-size:
+          20px 3px,
+          3px 20px,
+          20px 3px,
+          3px 20px;
+        background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+        animation: heroBoxAnts 1s linear infinite;
+      }
+      @keyframes heroBoxAnts {
+        to {
+          background-position:
+            20px 0,
+            100% 20px,
+            -20px 100%,
+            0 -20px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hero-box {
+          animation: none;
+        }
+      }
+      .hero-wow-logo {
+        height: 120px;
+        width: auto;
+        display: block;
+        margin: 0 auto 14px;
+      }
+      .hero-box h1 {
+        font-family: var(--font-body);
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        font-size: clamp(28px, 5vw, 40px);
+        line-height: 1.2;
+        margin-bottom: 12px;
+      }
+      .hero-box .sub {
+        font-size: 18px;
+        color: var(--ink-soft);
+        max-width: 480px;
+        margin: 0 auto;
+      }
+
+      /* Location tag — small Vegas nod at the bottom of the box */
+      .loc-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--orange);
+        margin-top: 16px;
+      }
+      .loc-tag svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 640px) {
+        /* Fixed px height (not vh) on small screens — mobile browsers size vh
+     against the viewport with the address bar collapsed, so vh renders
+     taller than what's actually visible on load. 600px ≈ 3/4 of a
+     typical ~800px mobile screen height. Box padding/logo size are just
+     a modest cosmetic reduction, not part of the fluid system above. */
+        .hero-band {
+          height: 600px;
+          max-height: 600px;
+        }
+        .hero-box {
+          padding: 20px 16px;
+        }
+        .hero-wow-logo {
+          height: 64px;
+        }
+      }
+
+      /* Section headings — plain H2s, Figtree (sans) rather than the Besley
+   serif used elsewhere, no eyebrow labels */
+      .section-h2 {
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: clamp(24px, 2.8vw, 32px);
+        letter-spacing: -0.01em;
+        margin-bottom: 20px;
+      }
+
+      .agenda-section {
+        padding-top: 56px;
+        padding-bottom: 72px;
+      }
+
+      /* "Builder Sessions" — neon-sign treatment: caps, wide letter-spacing,
+   framed in a glowing orange border. Sits on its own line above the
+   featured card and day filters (not sharing a row with anything). */
+      .neon-heading {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        border: 2px solid var(--orange);
+        border-radius: 10px;
+        padding: 6px 16px;
+        box-shadow:
+          0 0 12px rgba(252, 152, 103, 0.6),
+          0 0 26px rgba(252, 152, 103, 0.3);
+      }
+      .neon-heading svg {
+        width: 34px;
+        height: 34px;
+        color: var(--orange);
+        flex-shrink: 0;
+      }
+
+      /* Sub-headers — smaller than "Builder Sessions", no frame, used to
+   introduce the featured card ("Up Next"/"Happening Now") and the
+   filterable grid ("Browse Sessions"). Same treatment for both. */
+      .sub-header {
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--pink);
+        margin: 32px 0 22px;
+      }
+      .sub-header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin: 32px 0 28px;
+      }
+      .sub-header-row .sub-header {
+        margin: 0;
+      }
+      .sub-header-row .day-tabs {
+        margin-bottom: 0;
+      }
+
+      /* Featured "Up Next" card sits between the heading and the day filters,
+   outside the filterable grid, so switching days never hides it. */
+      #featSlot {
+        margin-bottom: 28px;
+      }
+
+      /* DAY TABS — simple filter for the agenda grid below */
+      .day-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+      }
+      .tab {
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--ink-faint);
+        background: transparent;
+        border: 1px solid var(--card-line);
+        border-radius: 999px;
+        padding: 9px 18px;
+        cursor: pointer;
+        transition:
+          background 0.15s ease,
+          color 0.15s ease,
+          border-color 0.15s ease;
+      }
+      .tab:hover {
+        border-color: rgba(239, 128, 227, 0.5);
+        color: #fff;
+      }
+      .tab.active {
+        background: var(--pink);
+        color: var(--dark-blue);
+        border-color: var(--pink);
+      }
+      /* Each day gets its own accent color; "All" cycles through all three,
+   like a sign flipping between them, since it represents all of them. */
+      .tab.active[data-day="Tuesday Sep 22"] {
+        background: var(--pink);
+        border-color: var(--pink);
+      }
+      .tab.active[data-day="Wednesday Sep 23"] {
+        background: var(--orange);
+        border-color: var(--orange);
+      }
+      .tab.active[data-day="Thursday Sep 24"] {
+        background: var(--gold);
+        border-color: var(--gold);
+      }
+      .tab.active[data-day="all"] {
+        animation: allDaysCycle 3s steps(1) infinite;
+      }
+      @keyframes allDaysCycle {
+        0% {
+          background: var(--pink);
+          border-color: var(--pink);
+        }
+        34% {
+          background: var(--orange);
+          border-color: var(--orange);
+        }
+        67% {
+          background: var(--gold);
+          border-color: var(--gold);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .tab.active[data-day="all"] {
+          animation: none;
+          background: var(--pink);
+          border-color: var(--pink);
+        }
+      }
+      .tab:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .tab:disabled:hover {
+        border-color: var(--card-line);
+        color: var(--ink-faint);
+      }
+
+      /* CARD GRID — 3 cols desktop/responsive, 2 compact, 1 mobile (see breakpoints-and-grid.md) */
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      @media (max-width: 1149px) {
+        .card-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 959px) {
+        .card-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Subtle motion — cards fade/slide in as they render, with a light
+   stagger across the first few, then lift slightly on hover. */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .card-grid > *:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .card-grid > *:nth-child(2) {
+        animation-delay: 0.05s;
+      }
+      .card-grid > *:nth-child(3) {
+        animation-delay: 0.1s;
+      }
+      .card-grid > *:nth-child(4) {
+        animation-delay: 0.15s;
+      }
+      .card-grid > *:nth-child(5) {
+        animation-delay: 0.2s;
+      }
+      .card-grid > *:nth-child(6) {
+        animation-delay: 0.25s;
+      }
+      .hero-box-frame {
+        animation: fadeInUp 0.6s ease both;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .s-card,
+        .res-card,
+        .hero-box-frame {
+          animation: none;
+        }
+        .s-card:hover,
+        .res-card:hover {
+          transform: none;
+        }
+      }
+
+      /* SESSION CARD (grid) */
+      .s-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        background: var(--card-blue-soft);
+        border: 1px solid var(--card-line);
+        border-radius: 14px;
+        padding: 22px 24px;
+        transition:
+          border-color 0.15s ease,
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+        animation: fadeInUp 0.5s ease both;
+      }
+      .s-card:hover {
+        border-color: var(--pink);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+      }
+      .s-card-time {
+        font-size: calc(11px + 0.4vw);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: var(--ink-faint);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      .s-card-topic {
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--orange);
+        opacity: 0.85;
+        margin-bottom: 8px;
+      }
+      .s-card h3 {
+        font-size: 19px;
+        line-height: 1.3;
+        color: #fff;
+        margin-bottom: 14px;
+      }
+      .s-card-desc {
+        font-size: 14px;
+        color: var(--ink-faint);
+        line-height: 1.5;
+        margin-bottom: 16px;
+      }
+      .s-card-speakers {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+      .s-mini {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .s-mini .s-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1.3;
+      }
+      .s-mini .s-role {
+        font-size: 13px;
+        color: var(--ink-faint);
+        line-height: 1.3;
+      }
+
+      /* NEXT EVENT — the soonest upcoming (or currently live) session, called out
+   with a Vegas-marquee-style blinking neon border wherever it lands in the
+   grid (naturally top-left, since the grid is sorted chronologically).
+   It also spans the full grid row, with a wide two-column layout inside
+   (content left, larger speaker portraits off to the right) instead of
+   the compact stacked layout the regular narrower cards use. */
+      .s-card-featured {
+        padding: 48px 52px;
+      }
+      .s-card-featured-inner {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 28px;
+        flex-wrap: wrap;
+      }
+      .s-card-main {
+        flex: 1;
+        min-width: 240px;
+      }
+      .s-card-featured h3 {
+        max-width: 640px;
+        font-size: 26px;
+      }
+      .speakers-row {
+        display: flex;
+        gap: 26px;
+        flex-shrink: 0;
+        flex-wrap: wrap;
+      }
+      .speaker-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 170px;
+      }
+      .speaker-col .s-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1.3;
+        margin-top: 14px;
+      }
+      .speaker-col .s-role {
+        font-size: 15px;
+        color: var(--ink-faint);
+        line-height: 1.3;
+      }
+      .s-card-featured {
+        grid-column: 1/-1;
+        border-width: 2px;
+        border-color: var(--pink);
+        box-shadow: 0 0 14px rgba(239, 128, 227, 0.6);
+      }
+
+      .avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 700;
+        color: var(--dark-blue);
+        flex-shrink: 0;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      /* Placeholder-speaker avatar (no photo yet) — Dewy mascot art on a soft
+   tint circle, contained (not cropped) since the art isn't a full-bleed
+   square photo like the real headshots. */
+      .avatar-placeholder {
+        background: #ede6ff;
+      }
+      .avatar-placeholder img {
+        width: 72%;
+        height: 72%;
+        object-fit: contain;
+      }
+
+      /* PAST SESSIONS — muted, with a placeholder slot for a recording to drop in later */
+      .past-section {
+        margin-top: 56px;
+      }
+      .s-card-past {
+        opacity: 0.7;
+        transition: opacity 0.15s ease;
+      }
+      .s-card-past:hover {
+        opacity: 1;
+      }
+      .video-slot {
+        aspect-ratio: 16/9;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px dashed var(--card-line);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 16px;
+        color: var(--ink-faint);
+        font-size: 12px;
+      }
+      .video-slot svg {
+        width: 26px;
+        height: 26px;
+        opacity: 0.6;
+      }
+
+      /* Text link — lighter-weight action for grid/past cards */
+      .text-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--orange);
+        text-decoration: none;
+        margin-top: auto;
+        align-self: flex-start;
+      }
+      .text-link:hover {
+        color: var(--pink);
+        text-decoration: underline;
+      }
+      .text-link svg {
+        width: 13px;
+        height: 13px;
+        flex-shrink: 0;
+      }
+
+      /* EXPLORE — moved to the bottom of the page, static (not sticky) */
+      .explore-section {
+        padding-bottom: 72px;
+      }
+      .res-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        background: var(--card-blue-soft);
+        border: 1px solid var(--card-line);
+        border-radius: 14px;
+        padding: 20px 22px;
+        text-decoration: none;
+        transition:
+          border-color 0.15s ease,
+          background 0.15s ease,
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+        animation: fadeInUp 0.5s ease both;
+      }
+      .res-card:hover {
+        border-color: var(--pink);
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+      }
+      .res-card .icn {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+      }
+      .res-card .icn svg {
+        width: 100%;
+        height: 100%;
+      }
+      .res-card .r-text h3 {
+        font-size: 16px;
+        color: #fff;
+        margin-bottom: 5px;
+      }
+      .res-card .r-text p {
+        font-size: calc(13px + 0.4vw);
+        color: var(--ink-faint);
+        line-height: 1.5;
+      }
+
+      footer {
+        padding: 0 0 48px;
+        text-align: center;
+        color: var(--ink-faint);
+        font-size: 13px;
+      }
+
+      @media (max-width: 640px) {
+        nav {
+          padding: 24px 0 20px;
+        }
+        /* Featured card's desktop-sized padding/avatars/title are way too big
+     for a narrow phone card — scale them down here. */
+        .s-card-featured {
+          padding: 24px 20px;
+        }
+        .s-card-featured h3 {
+          font-size: 19px;
+        }
+        .speaker-col {
+          width: 96px;
+        }
+        .speaker-col .avatar {
+          width: 70px !important;
+          height: 70px !important;
+        }
+        .speaker-col .s-name,
+        .speaker-col .s-role {
+          font-size: 13px;
+        }
+        .speaker-col .s-name {
+          margin-top: 10px;
+        }
+      }
+
+      /* DEBUG PANEL — dev-only helper, not part of the page design.
+   Shows viewport width/breakpoint tier and a toggle to outline
+   every .container in red so the grid system is visible. */
+      .debug-panel {
+        position: fixed;
+        left: 16px;
+        bottom: 16px;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.82);
+        color: #fff;
+        font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+        font-size: 12px;
+        line-height: 1.5;
+        padding: 10px 14px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      }
+      .debug-panel label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .debug-panel input,
+      .debug-panel select {
+        cursor: pointer;
+      }
+      .debug-panel select {
+        background: #111;
+        color: #fff;
+        border: 1px solid #444;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 11px;
+        padding: 2px 4px;
+      }
+      body.debug-outline .container {
+        outline: 2px solid var(--red);
+        outline-offset: -2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav-band">
+      <div class="container">
+        <nav>
+          <img class="wk-logo" src="src/workato-logo-teal.svg" alt="Workato" />
+        </nav>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <header class="hero-band">
+      <div class="hero-box-frame">
+        <div class="hero-box">
+          <img
+            class="hero-wow-logo"
+            src="src/wow-logo-vertical.svg"
+            alt="WOW – World of Workato"
+          />
+          <h1>Guide for Builders</h1>
+          <p class="sub">
+            Everything you need to find our sessions, meet the speakers, and get
+            the most out of WOW as a builder.
+          </p>
+          <div class="loc-tag">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 22s7-7.58 7-12A7 7 0 0 0 5 10c0 4.42 7 12 7 12z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            Las Vegas, NV · Sep 22–24, 2026
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- AGENDA (rendered by JS — see SESSIONS below) -->
+    <div class="container agenda-section">
+      <h2 class="section-h2 neon-heading">
+        Builder Sessions
+        <svg viewBox="0 -960 960 960" fill="currentColor">
+          <path
+            d="M240-280 40-480l200-200 56 56-143 144 143 144-56 56Zm178 132-76-24 200-640 76 24-200 640Zm302-132-56-56 143-144-143-144 56-56 200 200-200 200Z"
+          />
+        </svg>
+      </h2>
+
+      <div class="sub-header" id="featSubHeader" hidden></div>
+      <div id="featSlot"></div>
+
+      <div class="sub-header-row">
+        <div class="sub-header">Browse Sessions</div>
+        <div class="day-tabs" id="dayTabs">
+          <button class="tab active" data-day="all">All</button>
+          <button class="tab" data-day="Tuesday Sep 22">Tuesday</button>
+          <button class="tab" data-day="Wednesday Sep 23">Wednesday</button>
+          <button class="tab" data-day="Thursday Sep 24">Thursday</button>
+        </div>
+      </div>
+      <div id="agendaGrid" class="card-grid"></div>
+
+      <div id="pastSection" class="past-section" hidden>
+        <h2 class="section-h2">Past Sessions</h2>
+        <div id="pastGrid" class="card-grid"></div>
+      </div>
+    </div>
+
+    <!-- EXPLORE (rendered by JS — see RESOURCES below) -->
+    <div class="container explore-section">
+      <h2 class="section-h2 neon-heading">Explore</h2>
+      <div id="exploreGrid" class="card-grid"></div>
+    </div>
+
+    <footer>© 2026 Workato · WOW World of Workato</footer>
+
+    <!-- DEBUG PANEL — dev-only helper, see .debug-panel CSS above -->
+    <div class="debug-panel" id="debugPanel">
+      <div id="debugBreakpoint">—</div>
+      <label
+        ><input type="checkbox" id="debugOutlineToggle" /> Show
+        containers</label
+      >
+      <label
+        >Simulate date:
+        <select id="debugDateSim">
+          <option value="">Real time</option>
+          <option value="2026-09-21T12:00:00">Before Tuesday</option>
+          <option value="2026-09-22T10:00:00">Tuesday</option>
+          <option value="2026-09-23T10:00:00">Wednesday</option>
+          <option value="2026-09-24T08:00:00">Thursday</option>
+          <option value="2026-09-25T12:00:00">After Thursday</option>
+        </select>
+      </label>
+    </div>
+
+    <script>
+      /* ── Data ──────────────────────────────────────────────────────
+   One combined, chronological agenda spanning all three days — the
+   registered main-track talks and the informal Dev Lounge meetups
+   both live in this single SESSIONS array, sorted/filtered together.
+   `date` + `start`/`end` (24h) sort sessions and drive what's
+   live/next/past; `timeLabel` is what's shown. `dayShort` only
+   appears on grid cards when the "All" tab is active. `topic` (a
+   small eyebrow label) and `desc` (a short abstract) are used by the
+   informal Dev Lounge sessions; `url` is omitted (or '#') for
+   sessions with no registration link, in which case no "Learn more"
+   link is shown. */
+      const SESSIONS = [
+        {
+          day: "Tuesday Sep 22",
+          dayShort: "Tue",
+          date: "2026-09-22",
+          start: "17:00",
+          end: "18:00",
+          timeLabel: "Starts 5:00 PM",
+          topic: "Networking",
+          title: "Builder Networking",
+          speakers: [],
+        },
+
+        {
+          day: "Wednesday Sep 23",
+          dayShort: "Wed",
+          date: "2026-09-23",
+          start: "12:00",
+          end: "12:30",
+          timeLabel: "12:00 PM – 12:30 PM",
+          topic: "Community",
+          title: "Be the Future of Workato’s Community",
+          desc: "The brand new Workato Builders Community just launched, and we want to build it for YOU. Meet Workato Community Lead Aaron Weiss, hear our vision for Community, and tell us yours.",
+          speakers: [
+            { name: "Aaron Weiss", role: "Community Lead", company: "Workato" },
+          ],
+        },
+        {
+          day: "Wednesday Sep 23",
+          dayShort: "Wed",
+          date: "2026-09-23",
+          start: "13:00",
+          end: "13:45",
+          timeLabel: "1:00 PM – 1:45 PM",
+          topic: "Conversation",
+          title: "Lessons from Building Agent Teams",
+          desc: "Chloe, Matt, Fischer and Shubham share candid lessons from building agent teams: what failed, what they’d change, and a few deep-dive details about how they built what they did. Bring your questions.",
+          speakers: [
+            {
+              name: "Chloe Condon",
+              role: "Senior Developer Advocate",
+              company: "Workato",
+              photo: "src/portrait-chloe.jpeg",
+            },
+          ],
+        },
+        {
+          day: "Wednesday Sep 23",
+          dayShort: "Wed",
+          date: "2026-09-23",
+          start: "14:15",
+          end: "14:45",
+          timeLabel: "2:15 PM – 2:45 PM",
+          topic: "Behind the Scenes",
+          title: "Behind the Builder Keynote: Demos Unpacked",
+          desc: "Go behind-the-scenes of the keynote with an in-depth look at the demos, live Q&A, and sample apps you can take home to build on yourself.",
+          speakers: [
+            {
+              name: "Christopher Miller",
+              role: "Staff AI Software Engineer",
+              company: "Workato",
+              photo: "src/portrait-chris.jpeg",
+            },
+          ],
+        },
+        {
+          day: "Wednesday Sep 23",
+          dayShort: "Wed",
+          date: "2026-09-23",
+          start: "15:15",
+          end: "16:00",
+          timeLabel: "3:15 PM – 4:00 PM",
+          topic: "Research",
+          title: "Workato AI Research Spotlight",
+          desc: "Explore Workato’s AI research on LLM performance and specialized models for business processes. Meet the researchers and ask your questions.",
+          speakers: [{ name: "Thomas Joseph", company: "Workato" }],
+        },
+        {
+          day: "Wednesday Sep 23",
+          dayShort: "Wed",
+          date: "2026-09-23",
+          start: "16:45",
+          end: "17:45",
+          timeLabel: "Starts 4:45 PM",
+          topic: "Networking",
+          title: "Workato + OpenAI Builder Happy Hour",
+          desc: "Network with fellow builders over happy hour, meet the OpenAI product and Workato DevRel teams, and catch a surprise demo or two.",
+          speakers: [
+            {
+              name: "Zayne Turner",
+              role: "VP, Developer Relations",
+              company: "Workato",
+              photo: "src/portrait-zayne.jpeg",
+            },
+          ],
+        },
+
+        {
+          day: "Thursday Sep 24",
+          dayShort: "Thu",
+          date: "2026-09-24",
+          start: "10:45",
+          end: "11:00",
+          timeLabel: "10:45 AM – 11:00 AM",
+          topic: "Community",
+          title: "Community Champions: Learning Better, Together",
+          desc: "Hear how Workato community champions in India share knowledge, build relationships, and sharpen their technical skills—then take ideas back to your own practice.",
+          speakers: [{ name: "India Team", company: "Workato" }],
+        },
+        {
+          day: "Thursday Sep 24",
+          dayShort: "Thu",
+          date: "2026-09-24",
+          start: "11:30",
+          end: "12:00",
+          timeLabel: "11:30 AM – 12:00 PM",
+          topic: "Research",
+          title: "Workato AI Research Spotlight",
+          desc: "Explore Workato’s AI research on LLM performance and specialized models for business processes. Meet the researchers and ask your questions.",
+          speakers: [{ name: "Thomas Joseph", company: "Workato" }],
+        },
+        {
+          day: "Thursday Sep 24",
+          dayShort: "Thu",
+          date: "2026-09-24",
+          start: "12:30",
+          end: "12:45",
+          timeLabel: "12:30 PM – 12:45 PM",
+          topic: "Networking",
+          title: "Meet the Creators of Dewy",
+          desc: "Get to know Dewy: go behind-the-scenes and hear stories from the creatives behind Workato’s favorite mascot.",
+          speakers: [
+            { name: "Dominique", company: "Workato" },
+            { name: "Ray", company: "Workato" },
+          ],
+        },
+        {
+          day: "Thursday Sep 24",
+          dayShort: "Thu",
+          date: "2026-09-24",
+          start: "13:15",
+          end: "14:00",
+          timeLabel: "1:15 PM – 2:00 PM",
+          topic: "Demos",
+          title: "Builder Showcase: Lightning Demos",
+          desc: "Watch quick builds from Christopher Miller, Workato Developer Advocate, volunteer to share what you’re building and learn from fellow practitioners.",
+          speakers: [
+            {
+              name: "Christopher Miller",
+              role: "Staff AI Software Engineer",
+              company: "Workato",
+              photo: "src/portrait-chris.jpeg",
+            },
+          ],
+        },
+        {
+          day: "Thursday Sep 24",
+          dayShort: "Thu",
+          date: "2026-09-24",
+          start: "14:45",
+          end: "15:15",
+          timeLabel: "2:45 PM – 3:15 PM",
+          topic: "Demos",
+          title: "AWS Partner Demo: Details Coming Soon",
+          desc: "Join AWS and Workato for a technical demo. The topic, presenter, and practical takeaway will be announced soon.",
+          speakers: [{ name: "Regan Roby", company: "AWS" }],
+        },
+        {
+          day: "Thursday Sep 24",
+          dayShort: "Thu",
+          date: "2026-09-24",
+          start: "15:30",
+          end: "16:30",
+          timeLabel: "Starts 3:30 PM",
+          topic: "Networking",
+          title: "Builder Networking (pt. 2)",
+          desc: "Join Workato developers, the India team, and fellow builders for a final round of casual conversation, hands-on tips, and new connections to take with you as the conference comes to a close.",
+          speakers: [],
+        },
+      ];
+
+      const RESOURCES = [
+        {
+          title: "Community",
+          desc: "Connect with other Workato builders before, during, and after WOW.",
+        },
+        {
+          title: "Events Calendar",
+          desc: "See every upcoming Workato meetup, webinar, and conference in one place.",
+        },
+        {
+          title: "Follow Us",
+          desc: "Get updates from the Workato builder team on socials.",
+        },
+        {
+          title: "Self Serve",
+          desc: "Spin up a trial and start building your own recipes today.",
+        },
+        {
+          title: "Otto",
+          desc: "Meet the AI agent your whole team can work with.",
+        },
+      ];
+
+      const CHEVRON_SVG =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+      const CHAT_ICON_SVG =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.6"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>';
+      const PLAY_SVG =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor" stroke="none"/></svg>';
+
+      let gridSessionsAll = [];
+      let currentFilter = "all";
+      let featuredId = null;
+      let featuredIsLive = false;
+      let eventOver = false; // true once nothing is upcoming — disables day filters
+      let debugNowOverride = null; // Date set by the debug panel's date simulator, or null for real/?now=
+
+      function resolveNow() {
+        if (debugNowOverride) return debugNowOverride;
+        const urlOverride = new URLSearchParams(location.search).get("now");
+        return urlOverride ? new Date(urlOverride) : new Date();
+      }
+
+      function avatarHtml(sp, size) {
+        if (sp.photo) {
+          return `<div class="avatar" style="width:${size}px;height:${size}px;"><img src="${sp.photo}" alt="${sp.name}"></div>`;
+        }
+        return `<div class="avatar avatar-placeholder" style="width:${size}px;height:${size}px;"><img src="src/dewy-avatar-placeholder.png" alt="Speaker photo coming soon"></div>`;
+      }
+
+      function roleLine(sp) {
+        return [sp.role, sp.company].filter(Boolean).join(", ");
+      }
+
+      function speakersMiniHtml(speakers) {
+        return `<div class="s-card-speakers">${speakers
+          .map(
+            (sp) => `
+    <div class="s-mini">
+      ${avatarHtml(sp, 40)}
+      <div><div class="s-name">${sp.name}</div><div class="s-role">${roleLine(sp)}</div></div>
+    </div>`,
+          )
+          .join("")}</div>`;
+      }
+
+      function speakersRowHtml(speakers) {
+        return `<div class="speakers-row">${speakers
+          .map(
+            (sp) => `
+    <div class="speaker-col">
+      ${avatarHtml(sp, 130)}
+      <span class="s-name">${sp.name}</span>
+      <span class="s-role">${sp.role ? sp.role + "<br>" : ""}${sp.company}</span>
+    </div>`,
+          )
+          .join("")}</div>`;
+      }
+
+      function hasLink(s) {
+        return !!s.url && s.url !== "#";
+      }
+
+      function sessionCardHtml(s, showDay) {
+        const timeLine = showDay
+          ? `${s.dayShort} · ${s.timeLabel}`
+          : s.timeLabel;
+        const isFeatured = s.id === featuredId;
+        const topicHtml = s.topic
+          ? `<div class="s-card-topic">// ${s.topic.toLowerCase()}</div>`
+          : "";
+        const descHtml = s.desc ? `<p class="s-card-desc">${s.desc}</p>` : "";
+        const linkHtml = hasLink(s)
+          ? `<a href="${s.url}" class="text-link">Learn more ${CHEVRON_SVG}</a>`
+          : "";
+
+        if (isFeatured) {
+          return `<div class="s-card s-card-featured">
+      <div class="s-card-featured-inner">
+        <div class="s-card-main">
+          ${topicHtml}
+          <div class="s-card-time">${timeLine}</div>
+          <h3>${s.title}</h3>
+          ${descHtml}
+          ${linkHtml}
+        </div>
+        ${s.speakers.length ? speakersRowHtml(s.speakers) : ""}
+      </div>
+    </div>`;
+        }
+
+        return `<div class="s-card">
+    ${topicHtml}
+    <div class="s-card-time">${timeLine}</div>
+    <h3>${s.title}</h3>
+    ${descHtml}
+    ${s.speakers.length ? speakersMiniHtml(s.speakers) : ""}
+    ${linkHtml}
+  </div>`;
+      }
+
+      function pastCardHtml(s) {
+        const topicHtml = s.topic
+          ? `<div class="s-card-topic">// ${s.topic.toLowerCase()}</div>`
+          : "";
+        const descHtml = s.desc ? `<p class="s-card-desc">${s.desc}</p>` : "";
+        const linkHtml = hasLink(s)
+          ? `<a href="${s.url}" class="text-link">Watch recording ${CHEVRON_SVG}</a>`
+          : "";
+        return `<div class="s-card s-card-past">
+    <div class="video-slot">${PLAY_SVG}<span>Recording coming soon</span></div>
+    ${topicHtml}
+    <div class="s-card-time">${s.day} · ${s.timeLabel}</div>
+    <h3>${s.title}</h3>
+    ${descHtml}
+    ${s.speakers.length ? speakersMiniHtml(s.speakers) : ""}
+    ${linkHtml}
+  </div>`;
+      }
+
+      function renderGrid() {
+        if (eventOver) {
+          // Everything's over — the grid just becomes the full past-sessions
+          // list (day filters are disabled, so there's nothing to narrow by).
+          document.getElementById("agendaGrid").innerHTML = gridSessionsAll
+            .map(pastCardHtml)
+            .join("");
+          return;
+        }
+        const list =
+          currentFilter === "all"
+            ? gridSessionsAll
+            : gridSessionsAll.filter((s) => s.day === currentFilter);
+        document.getElementById("agendaGrid").innerHTML = list
+          .map((s) => sessionCardHtml(s, currentFilter === "all"))
+          .join("");
+      }
+
+      function setupTabs() {
+        document.querySelectorAll(".tab").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            if (eventOver) return;
+            currentFilter = btn.dataset.day;
+            document
+              .querySelectorAll(".tab")
+              .forEach((b) => b.classList.toggle("active", b === btn));
+            renderGrid();
+          });
+        });
+      }
+
+      function renderAgenda() {
+        // ?now=2026-09-23T15:00:00 lets you preview live/next/past behavior without
+        // waiting for the real event dates — otherwise this uses the real clock.
+        // (Or use the debug panel's date simulator, which takes priority.)
+        const now = resolveNow();
+
+        const withDates = SESSIONS.map((s, i) => ({
+          ...s,
+          id: i,
+          startDate: new Date(`${s.date}T${s.start}:00`),
+          endDate: new Date(`${s.date}T${s.end}:00`),
+        })).sort((a, b) => a.startDate - b.startDate);
+
+        const past = withDates.filter((s) => s.endDate <= now);
+        const upcoming = withDates.filter((s) => s.endDate > now);
+        const featured = upcoming[0];
+        eventOver = upcoming.length === 0 && past.length > 0;
+        gridSessionsAll = eventOver ? past : upcoming.slice(1);
+        featuredId = featured ? featured.id : null;
+        featuredIsLive = featured ? now >= featured.startDate : false;
+
+        // Auto-select today's day tab, if today is one of the event days.
+        const pad = (n) => String(n).padStart(2, "0");
+        const todayKey = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+        const dateToDay = {};
+        SESSIONS.forEach((s) => {
+          dateToDay[s.date] = s.day;
+        });
+        currentFilter = dateToDay[todayKey] || "all";
+        document.querySelectorAll(".tab").forEach((b) => {
+          b.classList.toggle("active", b.dataset.day === currentFilter);
+          b.disabled = eventOver;
+        });
+        document
+          .getElementById("dayTabs")
+          .classList.toggle("disabled", eventOver);
+
+        const featSubHeader = document.getElementById("featSubHeader");
+        if (featured) {
+          featSubHeader.hidden = false;
+          featSubHeader.textContent = featuredIsLive
+            ? "Happening Now"
+            : "Up Next";
+        } else {
+          featSubHeader.hidden = true;
+        }
+        document.getElementById("featSlot").innerHTML = featured
+          ? sessionCardHtml(featured, true)
+          : "";
+        renderGrid();
+
+        // Once the event is over, past sessions live in the main grid above
+        // instead of a separate "Past Sessions" section.
+        const pastSection = document.getElementById("pastSection");
+        if (!eventOver && past.length) {
+          pastSection.hidden = false;
+          document.getElementById("pastGrid").innerHTML = past
+            .map(pastCardHtml)
+            .join("");
+        } else {
+          pastSection.hidden = true;
+        }
+      }
+
+      function renderExplore() {
+        document.getElementById("exploreGrid").innerHTML = RESOURCES.map(
+          (r) => `
+    <a href="#" class="res-card">
+      <div class="icn">${CHAT_ICON_SVG}</div>
+      <div class="r-text"><h3>${r.title}</h3><p>${r.desc}</p></div>
+    </a>`,
+        ).join("");
+      }
+
+      function updateDebugBreakpoint() {
+        const w = window.innerWidth;
+        let tier;
+        if (w >= 1440) tier = "Desktop · 1438px";
+        else if (w >= 1150) tier = "Responsive · 1140px";
+        else if (w >= 960) tier = "Compact · 946px";
+        else tier = "Mobile · fluid";
+        document.getElementById("debugBreakpoint").textContent =
+          `${w}px — ${tier}`;
+      }
+
+      function setupDebugPanel() {
+        updateDebugBreakpoint();
+        window.addEventListener("resize", updateDebugBreakpoint);
+        document
+          .getElementById("debugOutlineToggle")
+          .addEventListener("change", (e) => {
+            document.body.classList.toggle("debug-outline", e.target.checked);
+          });
+        document
+          .getElementById("debugDateSim")
+          .addEventListener("change", (e) => {
+            debugNowOverride = e.target.value ? new Date(e.target.value) : null;
+            renderAgenda();
+          });
+      }
+
+      setupTabs();
+      renderAgenda();
+      renderExplore();
+      setupDebugPanel();
+    </script>
+  </body>
+</html>
