@@ -771,6 +771,51 @@
          }
 
          
+         /* DEBUG PANEL — dev-only helper, not part of the page design.
+      Shows viewport width/breakpoint tier and a toggle to outline
+      every .container in red so the grid system is visible. */
+         .debug-panel {
+           position: fixed;
+           left: 16px;
+           bottom: 16px;
+           z-index: 9999;
+           background: rgba(0, 0, 0, 0.82);
+           color: #fff;
+           font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+           font-size: 12px;
+           line-height: 1.5;
+           padding: 10px 14px;
+           border-radius: 8px;
+           display: flex;
+           flex-direction: column;
+           gap: 6px;
+           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+         }
+         .debug-panel label {
+           display: flex;
+           align-items: center;
+           gap: 6px;
+           cursor: pointer;
+           white-space: nowrap;
+         }
+         .debug-panel input,
+         .debug-panel select {
+           cursor: pointer;
+         }
+         .debug-panel select {
+           background: #111;
+           color: #fff;
+           border: 1px solid #444;
+           border-radius: 4px;
+           font-family: inherit;
+           font-size: 11px;
+           padding: 2px 4px;
+         }
+         body.debug-outline .container {
+           outline: 2px solid var(--red);
+           outline-offset: -2px;
+         }
+      
     </style>
   </head>
   <body>
@@ -853,6 +898,26 @@
 
     <footer>© 2026 Workato · WOW World of Workato</footer>
 
+    
+    <!-- DEBUG PANEL — dev-only helper, see .debug-panel CSS above -->
+    <div class="debug-panel" id="debugPanel">
+      <div id="debugBreakpoint">—</div>
+      <label
+        ><input type="checkbox" id="debugOutlineToggle" /> Show
+        containers</label
+      >
+      <label
+        >Simulate date:
+        <select id="debugDateSim">
+          <option value="">Real time</option>
+          <option value="2026-09-21T12:00:00">Before Tuesday</option>
+          <option value="2026-09-22T10:00:00">Tuesday</option>
+          <option value="2026-09-23T10:00:00">Wednesday</option>
+          <option value="2026-09-24T08:00:00">Thursday</option>
+          <option value="2026-09-25T12:00:00">After Thursday</option>
+        </select>
+      </label>
+    </div>
     
 
     <script>
@@ -1083,8 +1148,14 @@
           let featuredIsLive = false;
           let eventOver = false; // true once nothing is upcoming — disables day filters
           
+          let debugNowOverride = null; // Date set by the debug panel's date simulator, or null for real/?now=
+          
 
           function resolveNow() {
+            
+            if (debugNowOverride) return debugNowOverride;
+            const urlOverride = new URLSearchParams(location.search).get("now");
+            if (urlOverride) return new Date(urlOverride);
             
             return new Date();
           }
@@ -1292,10 +1363,39 @@
           }
 
           
+          function updateDebugBreakpoint() {
+            const w = window.innerWidth;
+            let tier;
+            if (w >= 1440) tier = "Desktop · 1438px";
+            else if (w >= 1150) tier = "Responsive · 1140px";
+            else if (w >= 960) tier = "Compact · 946px";
+            else tier = "Mobile · fluid";
+            document.getElementById("debugBreakpoint").textContent =
+              `${w}px — ${tier}`;
+          }
+
+          function setupDebugPanel() {
+            updateDebugBreakpoint();
+            window.addEventListener("resize", updateDebugBreakpoint);
+            document
+              .getElementById("debugOutlineToggle")
+              .addEventListener("change", (e) => {
+                document.body.classList.toggle("debug-outline", e.target.checked);
+              });
+            document
+              .getElementById("debugDateSim")
+              .addEventListener("change", (e) => {
+                debugNowOverride = e.target.value ? new Date(e.target.value) : null;
+                renderAgenda();
+              });
+          }
+          
 
           setupTabs();
           renderAgenda();
           renderExplore();
+          
+          setupDebugPanel();
           
     </script>
   </body>
