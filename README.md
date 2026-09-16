@@ -102,3 +102,4 @@ as `photo`, or omit `photo` to use the Dewy placeholder avatar.
 - Brand palette is defined as CSS variables at the top of `wow-2026.html`
   (`--teal`, `--dark-blue`, `--orange`, etc.) — reuse those tokens rather
   than hardcoding new colors.
+
