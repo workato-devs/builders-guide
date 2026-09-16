@@ -1,6 +1,3 @@
 title: Workato Builders Guide
 baseurl: "/builders-guide"
 url: "https://workato-devs.github.io"
-
-# Pass through the HTML as-is — no Liquid processing
-render_with_liquid: false
