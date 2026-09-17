@@ -24,7 +24,7 @@
     "desc": "The brand new Workato Builders Community just launched, and we want to build it for YOU. Meet Workato Community Lead Aaron Weiss, hear our vision for Community, and tell us yours.",
     "url": "",
     "speakers": [
-      { "name": "Aaron Weiss", "role": "Community Lead", "company": "Workato", "photo": "" }
+      { "name": "Aaron Weiss", "role": "Community Lead", "company": "Workato", "photo": "src/portrait-aaron.png" }
     ]
   },
   {
@@ -79,7 +79,7 @@
     "desc": "Explore Workato's AI research on LLM performance and specialized models for business processes. Meet the researchers and ask your questions.",
     "url": "",
     "speakers": [
-      { "name": "Thomas Joseph", "role": "", "company": "Workato", "photo": "" }
+      { "name": "Thomas Joseph", "role": "SVP, Agentic AI", "company": "Workato", "photo": "src/portrait-thomas.png" }
     ]
   },
   {
@@ -129,7 +129,7 @@
     "desc": "Explore Workato's AI research on LLM performance and specialized models for business processes. Meet the researchers and ask your questions.",
     "url": "",
     "speakers": [
-      { "name": "Thomas Joseph", "role": "", "company": "Workato", "photo": "" }
+      { "name": "Thomas Joseph", "role": "SVP, Agentic AI", "company": "Workato", "photo": "src/portrait-thomas.png" }
     ]
   },
   {
@@ -144,8 +144,8 @@
     "desc": "Get to know Dewy: go behind-the-scenes and hear stories from the creatives behind Workato's favorite mascot.",
     "url": "",
     "speakers": [
-      { "name": "Dominique", "role": "", "company": "Workato", "photo": "" },
-      { "name": "Ray", "role": "", "company": "Workato", "photo": "" }
+      { "name": "Domenique Sillett Buxton", "role": "Executive Creative Director", "company": "Workato", "photo": "src/portrait-domenique.png" },
+      { "name": "Ray Yuen", "role": "Art Director", "company": "Workato", "photo": "src/portrait-ray.png" }
     ]
   },
   {
@@ -180,7 +180,7 @@
     "desc": "Join AWS and Workato for a technical demo. The topic, presenter, and practical takeaway will be announced soon.",
     "url": "",
     "speakers": [
-      { "name": "Regan Roby", "role": "", "company": "AWS", "photo": "" }
+      { "name": "Regan Roby", "role": "Director, Partner Marketing", "company": "AWS", "photo": "src/portrait-regan.png" }
     ]
   },
   {
