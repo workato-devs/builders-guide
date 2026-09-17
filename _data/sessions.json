@@ -8,7 +8,7 @@
     "timeLabel": "Starts 5:00 PM",
     "topic": "Networking",
     "title": "Builder Networking",
-    "desc": "",
+    "desc": "Meet Workato developers, India Community Champions, and fellow builders for informal conversation, practical tips, and new connections across the community.",
     "url": "",
     "speakers": []
   },
@@ -177,10 +177,10 @@
     "timeLabel": "2:45 PM – 3:15 PM",
     "topic": "Demos",
     "title": "AWS Partner Demo: Details Coming Soon",
-    "desc": "Join AWS and Workato for a technical demo. The topic, presenter, and practical takeaway will be announced soon.",
+    "desc": "Join Sampath Kathirvel from AWS and Workato for a technical demo. The topic, presenter, and practical takeaway will be announced soon.",
     "url": "",
     "speakers": [
-      { "name": "Regan Roby", "role": "Director, Partner Marketing", "company": "AWS", "photo": "src/portrait-regan.png" }
+      { "name": "Sampath Kathirvel", "role": "Sr. Solutions Architect", "company": "AWS", "photo": "src/portrait-sampath.jpeg" }
     ]
   },
   {
