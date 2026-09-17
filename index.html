@@ -922,11 +922,11 @@
             return !!s.url && s.url !== "#";
           }
 
-          function sessionCardHtml(s, showDay) {
+          function sessionCardHtml(s, showDay, inGrid = false) {
             const timeLine = showDay
               ? `${s.dayShort} · ${s.timeLabel}`
               : s.timeLabel;
-            const isFeatured = s.id === featuredId;
+            const isFeatured = s.id === featuredId && !inGrid;
             const topicHtml = s.topic
               ? `<div class="s-card-topic">// ${s.topic.toLowerCase()}</div>`
               : "";
@@ -993,7 +993,7 @@
                 ? gridSessionsAll
                 : gridSessionsAll.filter((s) => s.day === currentFilter);
             document.getElementById("agendaGrid").innerHTML = list
-              .map((s) => sessionCardHtml(s, currentFilter === "all"))
+              .map((s) => sessionCardHtml(s, currentFilter === "all", true))
               .join("");
           }
 
