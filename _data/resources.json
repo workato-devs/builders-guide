@@ -1,0 +1,27 @@
+[
+  {
+    "title": "Community",
+    "desc": "Connect with other Workato builders before, during, and after WOW.",
+    "url": ""
+  },
+  {
+    "title": "Events Calendar",
+    "desc": "See every upcoming Workato meetup, webinar, and conference in one place.",
+    "url": ""
+  },
+  {
+    "title": "Follow Us",
+    "desc": "Get updates from the Workato builder team on socials.",
+    "url": ""
+  },
+  {
+    "title": "Self Serve",
+    "desc": "Spin up a trial and start building your own recipes today.",
+    "url": ""
+  },
+  {
+    "title": "Otto",
+    "desc": "Meet the AI agent your whole team can work with.",
+    "url": ""
+  }
+]
