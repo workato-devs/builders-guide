@@ -15,18 +15,12 @@
     "title": "Get Hands On",
     "desc": "Spin up your own Developer Account and start building today.",
     "url": "https://www.workato.com/request_demo",
-    "icon": "src/icon-self-serve.png"
+    "icon": "src/icon-get-hands-on.png"
   },
   {
     "title": "Stay in Touch",
     "desc": "Sign up for the Developer Newsletter.",
-    "url": "",
-    "icon": ""
-  },
-  {
-    "title": "Follow Us",
-    "desc": "Get updates from the Workato builder team on socials.",
-    "url": "",
-    "icon": ""
+    "url": "https://mktg.workato.com/workato-developer-updates.html",
+    "icon": "src/icon-stay-in-touch.png"
   }
 ]
