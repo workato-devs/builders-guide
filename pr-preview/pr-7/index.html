@@ -1,0 +1,1309 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WOW 2026 Builder Guide — Workato</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://workato-devs.github.io/builders-guide/pr-preview/pr-7/" />
+    <meta property="og:title" content="WOW 2026 Builder Guide — Workato" />
+    <meta
+      property="og:description"
+      content="Everything you need to find our sessions, meet the speakers, and get the most out of WOW as a builder."
+    />
+    <meta
+      property="og:image"
+      content="https://workato-devs.github.io/builders-guide/pr-preview/pr-7/src/social-share.jpg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="WOW 2026 Builder Guide — Workato" />
+    <meta
+      name="twitter:description"
+      content="Everything you need to find our sessions, meet the speakers, and get the most out of WOW as a builder."
+    />
+    <meta
+      name="twitter:image"
+      content="https://workato-devs.github.io/builders-guide/pr-preview/pr-7/src/social-share.jpg"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/builders-guide/pr-preview/pr-7/favicon.png"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+         /* ──────────────────────────────────────────────────────────────
+      WORKATO BRAND PALETTE (official — from BrandColors_RGB.ai)
+      Hero Teal #67EADD · Dark Teal #21DBC8 · Dark Blue #083763
+      Royal Blue #1D60CA · Medium Blue #2FD4FF · Orange Creamsicle #FC9867
+      Red #F00000 (used sparingly/semantically only)
+      ────────────────────────────────────────────────────────────── */
+         :root {
+           --teal: #67eadd;
+           --teal-dark: #21dbc8;
+           --dark-blue: #0e2c50;
+           --deep-blue: #062845;
+           --card-blue: #0c4070;
+           --card-blue-soft: rgba(255, 255, 255, 0.05);
+           --card-line: rgba(255, 255, 255, 0.13);
+           --orange: #fc9867;
+           --orange-deep: #ff5506;
+           --pink: #ef80e3;
+           --lilac: #c3a9ff;
+           --gold: #ffca00;
+           --red: #f00000;
+           --ink-soft: #c9ddef;
+           --ink-faint: #9fc4dd;
+           --font-display: "Besley", Georgia, serif;
+           --font-body:
+             "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
+             sans-serif;
+           /* standard Wolf2 breakpoint/grid system — see breakpoints-and-grid.md */
+           --max-w: 1438px;
+         }
+         /* Desktop 1440+: 1438 · Responsive 1150-1439: 1140 · Compact 960-1149: 946 · Tablet/Mobile <960: fluid */
+         @media (max-width: 1439px) {
+           :root {
+             --max-w: 1140px;
+           }
+         }
+         @media (max-width: 1149px) {
+           :root {
+             --max-w: 946px;
+           }
+         }
+         @media (max-width: 959px) {
+           :root {
+             --max-w: 100%;
+           }
+         }
+
+         * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+         }
+         html {
+           scroll-behavior: smooth;
+         }
+         body {
+           font-family: var(--font-body);
+           background: var(--dark-blue);
+           color: #fff;
+           line-height: 1.5;
+           -webkit-font-smoothing: antialiased;
+         }
+         .container {
+           max-width: var(--max-w);
+           margin: 0 auto;
+           padding: 0 24px;
+         }
+
+         h1,
+         h2 {
+           font-family: var(--font-display);
+           font-weight: 600;
+           letter-spacing: -0.01em;
+         }
+         h3 {
+           font-family: var(--font-body);
+           font-weight: 600;
+         }
+
+         /* NAV — the divider line lives on the full-width wrapper so it spans edge
+      to edge, while nav itself stays aligned to the standard container width */
+         .nav-band {
+           border-bottom: 1px solid var(--teal);
+         }
+         nav {
+           display: flex;
+           align-items: center;
+           justify-content: space-between;
+           padding: 32px 0 24px;
+         }
+         nav .wk-logo {
+           height: 22px;
+           width: auto;
+           display: block;
+         }
+
+         /* HERO BAND — full-bleed Vegas skyline artwork behind the page title. The
+      box always sits near the top (align-items:flex-start) rather than
+      toggling to centered at a breakpoint — no jump. Padding and
+      background-size are both fluid (clamp/calc against viewport width)
+      instead of switching between two fixed states, so there's a smooth
+      transition through the in-between "small tablet" widths instead of a
+      snap at one exact pixel.
+        background-size: exactly 125% (of band width) below ~480px, tapers
+      linearly down to exactly 100% at ~960px and holds there — so the crop
+      amount "scales out" gradually as the viewport widens, bottoming out at
+      no crop once there's enough room, same end states as before, just no
+      longer a hard switch. */
+         .hero-band {
+           position: relative;
+           min-height: 50vh;
+           display: flex;
+           align-items: flex-start;
+           justify-content: center;
+           background-color: var(--dark-blue);
+           background-image: url("src/hero-vegas-blue-fill.svg");
+           background-repeat: no-repeat;
+           background-position: center bottom;
+           background-size: clamp(100vw, calc(75vw + 240px), 125vw) auto;
+           padding: clamp(32px, 6vw, 64px) clamp(20px, 5vw, 48px)
+             clamp(32px, 6vw, 64px);
+         }
+
+         /* Outer frame + inner box give a double-stroke picture-frame look — two
+      concentric rings with a solid dark-blue fill in the gap between them
+      (a plain outline can't be filled, since it paints over whatever sits
+      behind the box, so this uses two real nested boxes instead). */
+         .hero-box-frame {
+           max-width: 764px;
+           width: 100%;
+           margin: 0 auto;
+           background: var(--dark-blue);
+           border: 2px solid var(--gold);
+           border-radius: 18px;
+           padding: 22px;
+           box-shadow:
+             0 0 12px rgba(255, 202, 0, 0.6),
+             0 0 26px rgba(255, 202, 0, 0.3);
+         }
+         /* Marching-ants border — chasing dashes around the perimeter, like a
+      theater/marquee sign. Border is transparent (kept only to hold the box
+      model's spacing); the dashes are 4 repeating-linear-gradient layers,
+      one per edge, each animated by shifting background-position one dash
+      cycle (20px) in the clockwise direction. */
+         .hero-box {
+           position: relative;
+           background-color: var(--dark-blue);
+           border: 3px solid transparent;
+           border-radius: 14px;
+           padding: 28px 24px;
+           text-align: center;
+           background-image:
+             repeating-linear-gradient(
+               to right,
+               var(--lilac) 0 10px,
+               transparent 10px 20px
+             ),
+             repeating-linear-gradient(
+               to bottom,
+               var(--lilac) 0 10px,
+               transparent 10px 20px
+             ),
+             repeating-linear-gradient(
+               to right,
+               var(--lilac) 0 10px,
+               transparent 10px 20px
+             ),
+             repeating-linear-gradient(
+               to bottom,
+               var(--lilac) 0 10px,
+               transparent 10px 20px
+             );
+           background-position:
+             0 0,
+             100% 0,
+             0 100%,
+             0 0;
+           background-size:
+             20px 3px,
+             3px 20px,
+             20px 3px,
+             3px 20px;
+           background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+           animation: heroBoxAnts 1s linear infinite;
+         }
+         @keyframes heroBoxAnts {
+           to {
+             background-position:
+               20px 0,
+               100% 20px,
+               -20px 100%,
+               0 -20px;
+           }
+         }
+         @media (prefers-reduced-motion: reduce) {
+           .hero-box {
+             animation: none;
+           }
+         }
+         .hero-wow-logo {
+           height: 120px;
+           width: auto;
+           display: block;
+           margin: 0 auto 14px;
+         }
+         .hero-box h1 {
+           font-family: var(--font-body);
+           font-weight: 800;
+           text-transform: uppercase;
+           letter-spacing: 0.01em;
+           font-size: clamp(28px, 5vw, 40px);
+           line-height: 1.2;
+           margin-bottom: 12px;
+         }
+         .hero-box .sub {
+           font-size: 18px;
+           color: var(--ink-soft);
+           max-width: 480px;
+           margin: 0 auto;
+         }
+
+         /* Location tag — small Vegas nod at the bottom of the box */
+         .loc-tag {
+           display: inline-flex;
+           align-items: center;
+           gap: 6px;
+           font-size: 13px;
+           font-weight: 700;
+           letter-spacing: 0.04em;
+           text-transform: uppercase;
+           color: var(--orange);
+           margin-top: 16px;
+         }
+         .loc-tag svg {
+           width: 14px;
+           height: 14px;
+           flex-shrink: 0;
+         }
+         .hero-ctas {
+           display: flex;
+           justify-content: center;
+           flex-wrap: wrap;
+           gap: 12px;
+           margin-top: 22px;
+         }
+         .hero-btn {
+           display: inline-flex;
+           align-items: center;
+           gap: 8px;
+           font-family: var(--font-body);
+           font-size: 15px;
+           font-weight: 700;
+           letter-spacing: 0.04em;
+           text-transform: uppercase;
+           text-decoration: none;
+           color: var(--dark-blue);
+           background: var(--teal);
+           border: none;
+           border-radius: 8px;
+           padding: 10px 20px;
+           cursor: pointer;
+           transition: background 0.15s ease, transform 0.15s ease;
+           white-space: nowrap;
+         }
+         .hero-btn:hover {
+           background: var(--teal-dark);
+           transform: translateY(-2px);
+         }
+         .hero-btn svg {
+           width: 20px;
+           height: 20px;
+           flex-shrink: 0;
+         }
+
+         @media (max-width: 640px) {
+           /* Fixed px min-height (not vh) on small screens — mobile browsers size
+        vh against the viewport with the address bar collapsed, so vh renders
+        taller than what's actually visible on load. 600px ≈ 3/4 of a
+        typical ~800px mobile screen height. This is a floor, not a cap —
+        if the box's content needs more room than that, the band grows to
+        keep it fully contained rather than letting it overflow. Box
+        padding/logo size are just a modest cosmetic reduction, not part of
+        the fluid system above. */
+           .hero-band {
+             min-height: 600px;
+           }
+           .hero-box {
+             padding: 20px 16px;
+           }
+           .hero-wow-logo {
+             height: 64px;
+           }
+         }
+
+         /* Section headings — plain H2s, Figtree (sans) rather than the Besley
+      serif used elsewhere, no eyebrow labels */
+         .section-h2 {
+           font-family: var(--font-body);
+           font-weight: 600;
+           font-size: clamp(24px, 2.8vw, 32px);
+           letter-spacing: -0.01em;
+           margin-bottom: 20px;
+         }
+
+         .agenda-section {
+           padding-top: 56px;
+           padding-bottom: 72px;
+         }
+
+         /* "Builder Sessions" — neon-sign treatment: caps, wide letter-spacing,
+      framed in a glowing orange border. Sits on its own line above the
+      featured card and day filters (not sharing a row with anything). */
+         .neon-heading {
+           display: inline-flex;
+           align-items: center;
+           gap: 10px;
+           font-weight: 800;
+           text-transform: uppercase;
+           letter-spacing: 0.08em;
+           border: 2px solid var(--orange);
+           border-radius: 10px;
+           padding: 6px 16px;
+           box-shadow:
+             0 0 12px rgba(252, 152, 103, 0.6),
+             0 0 26px rgba(252, 152, 103, 0.3);
+         }
+         .neon-heading svg {
+           width: 34px;
+           height: 34px;
+           color: var(--orange);
+           flex-shrink: 0;
+         }
+
+         /* Sub-headers — smaller than "Builder Sessions", no frame, used to
+      introduce the featured card ("Up Next"/"Happening Now") and the
+      filterable grid ("Browse Sessions"). Same treatment for both. */
+         .sub-header {
+           font-family: var(--font-body);
+           font-weight: 700;
+           font-size: 20px;
+           letter-spacing: 0.06em;
+           text-transform: uppercase;
+           color: var(--pink);
+           margin: 32px 0 22px;
+         }
+         .sub-header-row {
+           display: flex;
+           align-items: center;
+           justify-content: space-between;
+           flex-wrap: wrap;
+           gap: 16px;
+           margin: 32px 0 28px;
+         }
+         .sub-header-row .sub-header {
+           margin: 0;
+         }
+         #featSubHeader {
+           font-size: 24px;
+         }
+         .sub-header-row .day-tabs {
+           margin-bottom: 0;
+         }
+
+         /* Featured "Up Next" card sits between the heading and the day filters,
+      outside the filterable grid, so switching days never hides it. */
+         #featSlot {
+           margin-bottom: 28px;
+         }
+
+         /* DAY TABS — simple filter for the agenda grid below */
+         .day-tabs {
+           display: flex;
+           gap: 10px;
+           margin-bottom: 28px;
+           flex-wrap: wrap;
+         }
+         .tab {
+           font-family: var(--font-body);
+           font-weight: 700;
+           font-size: 14px;
+           color: var(--ink-faint);
+           background: transparent;
+           border: 1px solid var(--card-line);
+           border-radius: 999px;
+           padding: 9px 18px;
+           cursor: pointer;
+           transition:
+             background 0.15s ease,
+             color 0.15s ease,
+             border-color 0.15s ease;
+         }
+         .tab:hover {
+           border-color: rgba(239, 128, 227, 0.5);
+           color: #fff;
+         }
+         .tab.active {
+           background: var(--pink);
+           color: var(--dark-blue);
+           border-color: var(--pink);
+         }
+         /* Each day gets its own accent color; "All" cycles through all three,
+      like a sign flipping between them, since it represents all of them. */
+         .tab.active[data-day="Tuesday Sep 22"] {
+           background: var(--pink);
+           border-color: var(--pink);
+         }
+         .tab.active[data-day="Wednesday Sep 23"] {
+           background: var(--orange);
+           border-color: var(--orange);
+         }
+         .tab.active[data-day="Thursday Sep 24"] {
+           background: var(--gold);
+           border-color: var(--gold);
+         }
+         .tab.active[data-day="all"] {
+           animation: allDaysCycle 3s steps(1) infinite;
+         }
+         @keyframes allDaysCycle {
+           0% {
+             background: var(--pink);
+             border-color: var(--pink);
+           }
+           34% {
+             background: var(--orange);
+             border-color: var(--orange);
+           }
+           67% {
+             background: var(--gold);
+             border-color: var(--gold);
+           }
+         }
+         @media (prefers-reduced-motion: reduce) {
+           .tab.active[data-day="all"] {
+             animation: none;
+             background: var(--pink);
+             border-color: var(--pink);
+           }
+         }
+         .tab:disabled {
+           opacity: 0.4;
+           cursor: not-allowed;
+         }
+         .tab:disabled:hover {
+           border-color: var(--card-line);
+           color: var(--ink-faint);
+         }
+
+         /* CARD GRID — 3 cols desktop/responsive, 2 compact, 1 mobile (see breakpoints-and-grid.md) */
+         .card-grid {
+           display: grid;
+           grid-template-columns: repeat(3, 1fr);
+           gap: 24px;
+         }
+         @media (max-width: 1149px) {
+           .card-grid {
+             grid-template-columns: repeat(2, 1fr);
+           }
+         }
+         @media (max-width: 959px) {
+           .card-grid {
+             grid-template-columns: 1fr;
+           }
+         }
+
+         /* GET INVOLVED grid — 4 across on desktop/responsive, 2x2 on
+      compact, 1x4 (stacked) on mobile */
+         .card-grid.involved-grid {
+           grid-template-columns: repeat(3, 1fr);
+         }
+         @media (max-width: 1149px) {
+           .card-grid.involved-grid {
+             grid-template-columns: repeat(2, 1fr);
+           }
+         }
+         @media (max-width: 959px) {
+           .card-grid.involved-grid {
+             grid-template-columns: 1fr;
+           }
+         }
+
+         /* Subtle motion — cards fade/slide in as they render, with a light
+      stagger across the first few, then lift slightly on hover. */
+         @keyframes fadeInUp {
+           from {
+             opacity: 0;
+             transform: translateY(10px);
+           }
+           to {
+             opacity: 1;
+             transform: translateY(0);
+           }
+         }
+         .card-grid > *:nth-child(1) {
+           animation-delay: 0s;
+         }
+         .card-grid > *:nth-child(2) {
+           animation-delay: 0.05s;
+         }
+         .card-grid > *:nth-child(3) {
+           animation-delay: 0.1s;
+         }
+         .card-grid > *:nth-child(4) {
+           animation-delay: 0.15s;
+         }
+         .card-grid > *:nth-child(5) {
+           animation-delay: 0.2s;
+         }
+         .card-grid > *:nth-child(6) {
+           animation-delay: 0.25s;
+         }
+         .hero-box-frame {
+           animation: fadeInUp 0.6s ease both;
+         }
+         @media (prefers-reduced-motion: reduce) {
+           .s-card,
+           .res-card,
+           .hero-box-frame {
+             animation: none;
+           }
+           .s-card:hover,
+           .res-card:hover {
+             transform: none;
+           }
+         }
+
+         /* SESSION CARD (grid) */
+         .s-card {
+           position: relative;
+           display: flex;
+           flex-direction: column;
+           background: var(--card-blue-soft);
+           border: 1px solid var(--card-line);
+           border-radius: 14px;
+           padding: 22px 24px;
+           transition:
+             border-color 0.15s ease,
+             transform 0.2s ease,
+             box-shadow 0.2s ease;
+           animation: fadeInUp 0.5s ease both;
+         }
+         .s-card:hover {
+           border-color: var(--pink);
+           transform: translateY(-3px);
+           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+         }
+         .s-card-time {
+           font-size: calc(11px + 0.4vw);
+           font-weight: 700;
+           letter-spacing: 0.04em;
+           color: var(--ink-faint);
+           text-transform: uppercase;
+           margin-bottom: 8px;
+         }
+         .s-card-topic {
+           font-family: ui-monospace, "JetBrains Mono", Menlo, monospace;
+           font-size: 12px;
+           font-weight: 600;
+           color: var(--orange);
+           opacity: 0.85;
+           margin-bottom: 8px;
+         }
+         .s-card h3 {
+           font-size: 19px;
+           line-height: 1.3;
+           color: #fff;
+           margin-bottom: 10px;
+         }
+         .s-card-desc {
+           font-size: 14px;
+           color: var(--ink-faint);
+           line-height: 1.5;
+           margin-bottom: 16px;
+         }
+         .s-card-speakers {
+           display: flex;
+           flex-direction: column;
+           gap: 10px;
+           margin-top: auto;
+           padding-top: 14px;
+         }
+         .s-mini {
+           display: flex;
+           align-items: center;
+           gap: 10px;
+         }
+         .s-mini .s-name {
+           font-size: 13px;
+           font-weight: 700;
+           color: #fff;
+           line-height: 1.3;
+         }
+         .s-mini .s-role {
+           font-size: 13px;
+           color: var(--ink-faint);
+           line-height: 1.3;
+         }
+
+         /* NEXT EVENT — the soonest upcoming (or currently live) session, called out
+      with a Vegas-marquee-style blinking neon border wherever it lands in the
+      grid (naturally top-left, since the grid is sorted chronologically).
+      It also spans the full grid row, with a wide two-column layout inside
+      (content left, larger speaker portraits off to the right) instead of
+      the compact stacked layout the regular narrower cards use. */
+         .s-card-featured {
+           padding: 48px 52px;
+         }
+         .s-card-featured-inner {
+           display: flex;
+           align-items: flex-start;
+           justify-content: space-between;
+           gap: 28px;
+           flex-wrap: wrap;
+         }
+         .s-card-main {
+           flex: 1;
+           min-width: 240px;
+         }
+         .s-card-featured h3 {
+           max-width: 640px;
+           font-size: 26px;
+         }
+         .s-card-featured .s-card-desc {
+           font-size: 16px;
+           line-height: 1.6;
+           max-width: 640px;
+         }
+         .speakers-row {
+           display: flex;
+           gap: 26px;
+           flex-shrink: 0;
+           flex-wrap: wrap;
+         }
+         .speaker-col {
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           text-align: center;
+           width: 170px;
+         }
+         .speaker-col .s-name {
+           font-size: 15px;
+           font-weight: 700;
+           color: #fff;
+           line-height: 1.3;
+           margin-top: 14px;
+         }
+         .speaker-col .s-role {
+           font-size: 15px;
+           color: var(--ink-faint);
+           line-height: 1.3;
+         }
+         .s-card-featured {
+           grid-column: 1/-1;
+           border-width: 2px;
+           border-color: var(--pink);
+           box-shadow: 0 0 14px rgba(239, 128, 227, 0.6);
+         }
+
+         .avatar {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           font-family: var(--font-display);
+           font-weight: 700;
+           color: var(--dark-blue);
+           flex-shrink: 0;
+           border-radius: 50%;
+           overflow: hidden;
+         }
+         .avatar img {
+           width: 100%;
+           height: 100%;
+           object-fit: cover;
+           display: block;
+         }
+         /* Placeholder-speaker avatar (no photo yet) — Dewy mascot art on a soft
+      tint circle, contained (not cropped) since the art isn't a full-bleed
+      square photo like the real headshots. */
+         .avatar-placeholder {
+           background: #ede6ff;
+         }
+         .avatar-placeholder img {
+           width: 72%;
+           height: 72%;
+           object-fit: contain;
+         }
+
+         /* PAST SESSIONS — muted, with a placeholder slot for a recording to drop in later */
+         .past-section {
+           margin-top: 56px;
+         }
+         .s-card-past {
+           opacity: 0.7;
+           transition: opacity 0.15s ease;
+         }
+         .s-card-past:hover {
+           opacity: 1;
+         }
+         .video-slot {
+           aspect-ratio: 16/9;
+           background: rgba(255, 255, 255, 0.04);
+           border: 1px dashed var(--card-line);
+           border-radius: 10px;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           justify-content: center;
+           gap: 8px;
+           margin-bottom: 16px;
+           color: var(--ink-faint);
+           font-size: 12px;
+         }
+         .video-slot svg {
+           width: 26px;
+           height: 26px;
+           opacity: 0.6;
+         }
+
+         /* Text link — lighter-weight action for grid/past cards */
+         .text-link {
+           display: inline-flex;
+           align-items: center;
+           gap: 6px;
+           font-family: var(--font-body);
+           font-weight: 700;
+           font-size: 14px;
+           color: var(--orange);
+           text-decoration: none;
+           margin-top: 14px;
+           align-self: flex-start;
+         }
+         .text-link:hover {
+           color: var(--pink);
+           text-decoration: underline;
+         }
+         .text-link svg {
+           width: 13px;
+           height: 13px;
+           flex-shrink: 0;
+         }
+
+         /* EXPLORE — moved to the bottom of the page, static (not sticky) */
+         .explore-section {
+           padding-bottom: 72px;
+         }
+         .res-card {
+           display: flex;
+           align-items: flex-start;
+           gap: 22px;
+           min-width: 0;
+           background: var(--card-blue-soft);
+           border: 1px solid var(--card-line);
+           border-radius: 14px;
+           padding: 20px 22px;
+           text-decoration: none;
+           transition:
+             border-color 0.15s ease,
+             background 0.15s ease,
+             transform 0.2s ease,
+             box-shadow 0.2s ease;
+           animation: fadeInUp 0.5s ease both;
+         }
+         .res-card:hover {
+           border-color: var(--pink);
+           background: rgba(255, 255, 255, 0.08);
+           transform: translateY(-3px);
+           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+         }
+         .res-card .icn {
+           width: 72px;
+           align-self: stretch;
+           flex-shrink: 0;
+         }
+         .res-card .icn svg,
+         .res-card .icn img {
+           width: 100%;
+           height: 100%;
+           object-fit: contain;
+           display: block;
+         }
+         .res-card .r-text {
+           min-width: 0;
+         }
+         .res-card .r-text h3 {
+           font-size: 16px;
+           color: #fff;
+           margin-bottom: 5px;
+         }
+         .res-card .r-text p {
+           font-size: 14px;
+           color: var(--ink-faint);
+           line-height: 1.5;
+         }
+
+         footer {
+           padding: 0 0 48px;
+           text-align: center;
+           color: var(--ink-faint);
+           font-size: 13px;
+         }
+
+         /* SOCIAL BAND — row of circular icon links along the bottom,
+            above the copyright line */
+         .social-band {
+           padding-bottom: 40px;
+         }
+         .social-row {
+           display: flex;
+           justify-content: center;
+           flex-wrap: wrap;
+           gap: 14px;
+         }
+         .social-link {
+           width: 44px;
+           height: 44px;
+           border-radius: 50%;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           background: var(--card-blue-soft);
+           border: 1px solid var(--card-line);
+           color: var(--ink-faint);
+           transition:
+             border-color 0.15s ease,
+             color 0.15s ease,
+             background 0.15s ease,
+             transform 0.2s ease;
+         }
+         .social-link svg {
+           width: 20px;
+           height: 20px;
+         }
+         .social-link:hover {
+           color: #fff;
+           border-color: var(--pink);
+           background: rgba(255, 255, 255, 0.08);
+           transform: translateY(-2px);
+         }
+
+         @media (max-width: 640px) {
+           nav {
+             padding: 24px 0 20px;
+           }
+           /* Featured card's desktop-sized padding/avatars/title are way too big
+        for a narrow phone card — scale them down here. */
+           .s-card-featured {
+             padding: 24px 20px;
+           }
+           .s-card-featured h3 {
+             font-size: 19px;
+           }
+           .speaker-col {
+             width: 96px;
+           }
+           .speaker-col .avatar {
+             width: 70px !important;
+             height: 70px !important;
+           }
+           .speaker-col .s-name,
+           .speaker-col .s-role {
+             font-size: 13px;
+           }
+           .speaker-col .s-name {
+             margin-top: 10px;
+           }
+         }
+
+         
+    </style>
+  </head>
+  <body>
+    <div class="nav-band">
+      <div class="container">
+        <nav>
+          <img class="wk-logo" src="src/workato-logo-teal.svg" alt="Workato" />
+        </nav>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <header class="hero-band">
+      <div class="hero-box-frame">
+        <div class="hero-box">
+          <img
+            class="hero-wow-logo"
+            src="src/wow-logo-vertical.svg"
+            alt="WOW – World of Workato"
+          />
+          <h1>Guide for Builders</h1>
+          <p class="sub">
+            Everything you need to find our sessions, meet the speakers, and get
+            the most out of WOW as a builder.
+          </p>
+          <div class="loc-tag">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M12 22s7-7.58 7-12A7 7 0 0 0 5 10c0 4.42 7 12 7 12z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+            Las Vegas, NV · Sep 22–24, 2026
+          </div>
+          <div class="hero-ctas">
+            <a href="#builder-sessions" class="hero-btn">
+              Builder Sessions
+              <svg viewBox="0 -960 960 960" fill="currentColor">
+                <path d="M240-280 40-480l200-200 56 56-143 144 143 144-56 56Zm178 132-76-24 200-640 76 24-200 640Zm302-132-56-56 143-144-143-144 56-56 200 200-200 200Z" />
+              </svg>
+            </a>
+            <a href="#explore" class="hero-btn">
+              Get Involved
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- AGENDA (rendered by JS — see SESSIONS below) -->
+    <div class="container agenda-section">
+      <h2 class="section-h2 neon-heading" id="builder-sessions">
+        Builder Sessions
+        <svg viewBox="0 -960 960 960" fill="currentColor">
+          <path
+            d="M240-280 40-480l200-200 56 56-143 144 143 144-56 56Zm178 132-76-24 200-640 76 24-200 640Zm302-132-56-56 143-144-143-144 56-56 200 200-200 200Z"
+          />
+        </svg>
+      </h2>
+
+      <div class="sub-header" id="featSubHeader" hidden></div>
+      <div id="featSlot"></div>
+
+      <div class="sub-header-row">
+        <div class="sub-header">Browse Sessions</div>
+        <div class="day-tabs" id="dayTabs">
+          <button class="tab active" data-day="all">All</button>
+          <button class="tab" data-day="Tuesday Sep 22">Tuesday</button>
+          <button class="tab" data-day="Wednesday Sep 23">Wednesday</button>
+          <button class="tab" data-day="Thursday Sep 24">Thursday</button>
+        </div>
+      </div>
+      <div id="agendaGrid" class="card-grid"></div>
+
+      <div id="pastSection" class="past-section" hidden>
+        <h2 class="section-h2">Past Sessions</h2>
+        <div id="pastGrid" class="card-grid"></div>
+      </div>
+    </div>
+
+    <!-- EXPLORE (rendered by JS — see RESOURCES below) -->
+    <div class="container explore-section">
+      <h2 class="section-h2 neon-heading" id="explore">Get Involved
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+        </svg>
+      </h2>
+      <div id="exploreGrid" class="card-grid involved-grid"></div>
+    </div>
+
+    <!-- SOCIAL BAND (rendered by JS — see SOCIALS below) -->
+    <div class="container social-band">
+      <div id="socialBand" class="social-row"></div>
+    </div>
+
+    <footer>© 2026 Workato · WOW World of Workato</footer>
+
+    
+
+    <script>
+      /* ── Data ──────────────────────────────────────────────────────
+       Sessions and resources are loaded from _data/sessions.json and
+       _data/resources.json at Jekyll build time. Edit those files to
+       update the agenda — no need to touch this file. */
+          const SESSIONS = [{"day":"Tuesday Sep 22","dayShort":"Tue","date":"2026-09-22","start":"17:00","end":"17:45","timeLabel":"5:00 PM – 5:45 PM","topic":"Connect","title":"Builder Networking","desc":"Meet Workato developers and fellow builders for informal conversation, practical tips, and new connections across the community.","url":"","speakers":[{"name":"Aaron Weiss","role":"Community Lead","company":"Workato","photo":"src/portrait-aaron.png"}]},{"day":"Wednesday Sep 23","dayShort":"Wed","date":"2026-09-23","start":"12:00","end":"12:45","timeLabel":"12:00 PM – 12:45 PM","topic":"Connect","title":"Be the Future of Workato's Community","desc":"The brand new Workato Builders Community just launched, and we want to build it for YOU. Meet Workato Community Lead Aaron Weiss, hear our vision for Community, and tell us yours.","url":"","speakers":[{"name":"Aaron Weiss","role":"Community Lead","company":"Workato","photo":"src/portrait-aaron.png"}]},{"day":"Wednesday Sep 23","dayShort":"Wed","date":"2026-09-23","start":"13:00","end":"13:45","timeLabel":"1:00 PM – 1:45 PM","topic":"Learn","title":"Lessons from Building Agent Teams","desc":"Chloe, Matt, Fischer and Shubham share candid lessons from building agent teams: what failed, what they'd change, and a few deep-dive details about how they built what they did. Bring your questions.","url":"","speakers":[{"name":"Chloe Condon","role":"Senior Developer Advocate","company":"Workato","photo":"src/portrait-chloe.jpeg"}]},{"day":"Wednesday Sep 23","dayShort":"Wed","date":"2026-09-23","start":"14:15","end":"15:00","timeLabel":"2:15 PM – 3:00 PM","topic":"Build","title":"Builder Showcase: Lightning Demos","desc":"Watch quick builds from Christopher Miller, Workato Developer Advocate, volunteer to share what you're building, and learn from fellow practitioners.","url":"","speakers":[{"name":"Christopher Miller","role":"Staff AI Software Engineer","company":"Workato","photo":"src/portrait-chris.jpeg"}]},{"day":"Wednesday Sep 23","dayShort":"Wed","date":"2026-09-23","start":"15:15","end":"16:00","timeLabel":"3:15 PM – 4:00 PM","topic":"Learn","title":"Workato AI Research Spotlight","desc":"Explore Workato's AI research on LLM performance and specialized models for business processes. Meet the researchers and ask your questions.","url":"","speakers":[{"name":"Thomas Joseph","role":"SVP, Agentic AI","company":"Workato","photo":"src/portrait-thomas.png"}]},{"day":"Wednesday Sep 23","dayShort":"Wed","date":"2026-09-23","start":"16:45","end":"17:30","timeLabel":"4:45 PM – 5:30 PM","topic":"Connect","title":"OpenAI + Workato Builder Happy Hour","desc":"Network with fellow builders over happy hour, meet the OpenAI product and Workato DevRel teams, and catch a surprise demo or two.","url":"","speakers":[{"name":"Zayne Turner","role":"VP, Developer Relations","company":"Workato","photo":"src/portrait-zayne.jpeg"}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"10:45","end":"11:30","timeLabel":"10:45 AM – 11:30 AM","topic":"Learn","title":"Community Champions: Learning Better, Together","desc":"Hear how Workato community champions in India share knowledge, build relationships, and sharpen their technical skills—then take ideas back to your own practice.","url":"","speakers":[{"name":"India Team","role":"","company":"Workato","photo":""}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"11:30","end":"12:00","timeLabel":"11:30 AM – 12:00 PM","topic":"Learn","title":"Workato AI Research Spotlight","desc":"Explore Workato's AI research on LLM performance and specialized models for business processes. Meet the researchers and ask your questions.","url":"","speakers":[{"name":"Thomas Joseph","role":"SVP, Agentic AI","company":"Workato","photo":"src/portrait-thomas.png"}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"12:30","end":"13:15","timeLabel":"12:30 PM – 1:15 PM","topic":"Build","title":"Meet the Creators of Dewy","desc":"Get to know Dewy: go behind-the-scenes and hear stories from the creatives behind Workato's favorite mascot.","url":"","speakers":[{"name":"Domenique Sillett Buxton","role":"Executive Creative Director","company":"Workato","photo":"src/portrait-domenique.png"},{"name":"Ray Yuen","role":"Art Director","company":"Workato","photo":"src/portrait-ray.png"}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"13:15","end":"14:00","timeLabel":"1:15 PM – 2:00 PM","topic":"Build","title":"Builder Showcase: Lightning Demos (pt 2)","desc":"Watch quick builds from Christopher Miller, Workato Developer Advocate, volunteer to share what you're building, and learn from fellow practitioners.","url":"","speakers":[{"name":"Christopher Miller","role":"Staff AI Software Engineer","company":"Workato","photo":"src/portrait-chris.jpeg"}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"14:45","end":"15:30","timeLabel":"2:45 PM – 3:30 PM","topic":"Learn","title":"AWS Partner Demo: Details Coming Soon","desc":"Join Sampath Kathirvel from AWS and Workato for a technical demo. The topic, presenter, and practical takeaway will be announced soon.","url":"","speakers":[{"name":"Sampath Kathirvel","role":"Sr. Solutions Architect","company":"AWS","photo":"src/portrait-sampath.jpeg"}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"15:30","end":"16:15","timeLabel":"3:30 PM – 4:15 PM","topic":"Connect","title":"Builder Networking (pt. 2)","desc":"Join Workato developers, the India team, and fellow builders for a final round of casual conversation, hands-on tips, and new connections to take with you as the conference comes to a close.","url":"","speakers":[]}];
+          const RESOURCES = [{"title":"Join The Community","desc":"Connect with other Workato builders before, during, and after WOW.","url":"https://community.workato.com/","icon":"src/icon-community.png"},{"title":"Attend Workato Events","desc":"See every upcoming Workato meetup, webinar, and conference in one place.","url":"https://luma.com/workatodevs","icon":"src/icon-events-calendar.png"},{"title":"Get Hands On","desc":"Spin up your own Developer Account and start building today.","url":"https://www.workato.com/request_demo","icon":"src/icon-get-hands-on.png"},{"title":"Stay in Touch","desc":"Sign up for the Developer Newsletter.","url":"https://mktg.workato.com/workato-developer-updates.html","icon":"src/icon-stay-in-touch.png"},{"title":"Apply: Workato Community Legends","desc":"Get rewarded and recognized by Workato for creating content, hosting meetups, and engaging in the community.","url":"https://docs.google.com/forms/d/e/1FAIpQLSeoe2VeSPHC4RLCTvS98ozjsz9dNvzJIlLdvNWwvvrA_cxH4w/viewform?usp=dialog","icon":"src/icon-legends.png"},{"title":"Video Content Sign Up","desc":"Sign up to record video content with our team at WOW","url":"https://docs.google.com/forms/d/e/1FAIpQLScHBYwL7uvFK77sA7CkhXs7_v_TS4EMyXp3R3OJx25pjHHeOA/viewform","icon":"src/icon-video-signup.png"}];
+          const SOCIALS = [{"name":"LinkedIn","url":"https://www.linkedin.com/showcase/workato-developers/"},{"name":"Instagram","url":"https://www.instagram.com/workatohq/?hl=en"},{"name":"YouTube","url":"https://www.youtube.com/channel/UC23xuvk2DoIlNWv3uAGb18w"},{"name":"X","url":"https://x.com/Workato"},{"name":"Facebook","url":"https://www.facebook.com/workato/"},{"name":"GitHub","url":"https://github.com/workato-devs"}];
+
+          const CHEVRON_SVG =
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+          const CHAT_ICON_SVG =
+            '<svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="1.6"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>';
+          const PLAY_SVG =
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5v-7z" fill="currentColor" stroke="none"/></svg>';
+
+          /* Social icons — standard single-path brand marks, filled with
+             currentColor so hover state is controlled entirely by CSS. */
+          const SOCIAL_ICONS = {
+            LinkedIn:
+              '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>',
+            Instagram:
+              '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C8.74 0 8.333.014 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.014 8.333 0 8.74 0 12s.014 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.986 8.74 24 12 24s3.667-.014 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.058-1.28.072-1.687.072-4.947s-.014-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.014 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.073 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06zM12 5.838c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793 0 1.44.645 1.44 1.439z"/></svg>',
+            YouTube:
+              '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
+            X: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+            Facebook:
+              '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 8.7 8.7 0 0 0-.5-.016 4.65 4.65 0 0 0-1.098.128 1.878 1.878 0 0 0-.803.398c-.221.207-.375.474-.457.797-.101.481-.145.973-.13 1.464v1.2h3.507l-.577 3.667h-2.93v7.98H9.101z"/></svg>',
+            GitHub:
+              '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>',
+          };
+
+          let gridSessionsAll = [];
+          let currentFilter = "all";
+          let featuredId = null;
+          let featuredIsLive = false;
+          let eventOver = false; // true once nothing is upcoming — disables day filters
+          
+
+          function resolveNow() {
+            
+            return new Date();
+          }
+
+          function avatarHtml(sp, size) {
+            if (sp.photo) {
+              return `<div class="avatar" style="width:${size}px;height:${size}px;"><img src="${escAttr(sp.photo)}" alt="${escAttr(sp.name)}"></div>`;
+            }
+            return `<div class="avatar avatar-placeholder" style="width:${size}px;height:${size}px;"><img src="src/dewy-avatar-placeholder.png" alt="Speaker photo coming soon"></div>`;
+          }
+
+          function roleLine(sp) {
+            return [sp.role, sp.company].filter(Boolean).map(escHtml).join(", ");
+          }
+
+          function speakersMiniHtml(speakers) {
+            return `<div class="s-card-speakers">${speakers
+              .map(
+                (sp) => `
+        <div class="s-mini">
+          ${avatarHtml(sp, 80)}
+          <div><div class="s-name">${escHtml(sp.name)}</div><div class="s-role">${roleLine(sp)}</div></div>
+        </div>`,
+              )
+              .join("")}</div>`;
+          }
+
+          function speakersRowHtml(speakers) {
+            return `<div class="speakers-row">${speakers
+              .map(
+                (sp) => `
+        <div class="speaker-col">
+          ${avatarHtml(sp, 130)}
+          <span class="s-name">${escHtml(sp.name)}</span>
+          <span class="s-role">${sp.role ? escHtml(sp.role) + "<br>" : ""}${escHtml(sp.company)}</span>
+        </div>`,
+              )
+              .join("")}</div>`;
+          }
+
+          function hasLink(s) {
+            return !!s.url && s.url !== "#" && isSafeUrl(s.url);
+          }
+
+          function sessionCardHtml(s, showDay, inGrid = false) {
+            const timeLine = showDay
+              ? `${escHtml(s.dayShort)} · ${escHtml(s.timeLabel)}`
+              : escHtml(s.timeLabel);
+            const isFeatured = s.id === featuredId && !inGrid;
+            const topicHtml = s.topic
+              ? `<div class="s-card-topic">// ${escHtml(s.topic.toLowerCase())}</div>`
+              : "";
+            const descHtml = s.desc ? `<p class="s-card-desc">${escHtml(s.desc)}</p>` : "";
+            const linkHtml = hasLink(s)
+              ? `<a href="${escAttr(s.url)}" class="text-link">Learn more ${CHEVRON_SVG}</a>`
+              : "";
+
+            if (isFeatured) {
+              return `<div class="s-card s-card-featured">
+          <div class="s-card-featured-inner">
+            <div class="s-card-main">
+              ${topicHtml}
+              <div class="s-card-time">${timeLine}</div>
+              <h3>${escHtml(s.title)}</h3>
+              ${descHtml}
+              ${linkHtml}
+            </div>
+            ${s.speakers.length ? speakersRowHtml(s.speakers) : ""}
+          </div>
+        </div>`;
+            }
+
+            return `<div class="s-card">
+        ${topicHtml}
+        <div class="s-card-time">${timeLine}</div>
+        <h3>${escHtml(s.title)}</h3>
+        ${descHtml}
+        ${s.speakers.length ? speakersMiniHtml(s.speakers) : ""}
+        ${linkHtml}
+      </div>`;
+          }
+
+          function pastCardHtml(s) {
+            const topicHtml = s.topic
+              ? `<div class="s-card-topic">// ${escHtml(s.topic.toLowerCase())}</div>`
+              : "";
+            const descHtml = s.desc ? `<p class="s-card-desc">${escHtml(s.desc)}</p>` : "";
+            const linkHtml = hasLink(s)
+              ? `<a href="${escAttr(s.url)}" class="text-link">Watch recording ${CHEVRON_SVG}</a>`
+              : "";
+            return `<div class="s-card s-card-past">
+        <div class="video-slot">${PLAY_SVG}<span>Recording coming soon</span></div>
+        ${topicHtml}
+        <div class="s-card-time">${escHtml(s.day)} · ${escHtml(s.timeLabel)}</div>
+        <h3>${escHtml(s.title)}</h3>
+        ${descHtml}
+        ${s.speakers.length ? speakersMiniHtml(s.speakers) : ""}
+        ${linkHtml}
+      </div>`;
+          }
+
+          function renderGrid() {
+            if (eventOver) {
+              // Everything's over — the grid just becomes the full past-sessions
+              // list (day filters are disabled, so there's nothing to narrow by).
+              document.getElementById("agendaGrid").innerHTML = gridSessionsAll
+                .map(pastCardHtml)
+                .join("");
+              return;
+            }
+            const list =
+              currentFilter === "all"
+                ? gridSessionsAll
+                : gridSessionsAll.filter((s) => s.day === currentFilter);
+            document.getElementById("agendaGrid").innerHTML = list
+              .map((s) => sessionCardHtml(s, currentFilter === "all", true))
+              .join("");
+          }
+
+          function setupTabs() {
+            document.querySelectorAll(".tab").forEach((btn) => {
+              btn.addEventListener("click", () => {
+                if (eventOver) return;
+                currentFilter = btn.dataset.day;
+                document
+                  .querySelectorAll(".tab")
+                  .forEach((b) => b.classList.toggle("active", b === btn));
+                renderGrid();
+              });
+            });
+          }
+
+          function renderAgenda() {
+            // ?now=2026-09-23T15:00:00 lets you preview live/next/past behavior without
+            // waiting for the real event dates — otherwise this uses the real clock.
+            // (Or use the debug panel's date simulator, which takes priority.)
+            const now = resolveNow();
+
+            const withDates = SESSIONS.map((s, i) => ({
+              ...s,
+              id: i,
+              startDate: new Date(`${s.date}T${s.start}:00`),
+              endDate: new Date(`${s.date}T${s.end}:00`),
+            })).sort((a, b) => a.startDate - b.startDate);
+
+            const past = withDates.filter((s) => s.endDate <= now);
+            const upcoming = withDates.filter((s) => s.endDate > now);
+            const featured = upcoming[0];
+            eventOver = upcoming.length === 0 && past.length > 0;
+            gridSessionsAll = eventOver ? past : upcoming;
+            featuredId = featured ? featured.id : null;
+            featuredIsLive = featured ? now >= featured.startDate : false;
+
+            // Auto-select today's day tab, if today is one of the event days.
+            const pad = (n) => String(n).padStart(2, "0");
+            const todayKey = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+            const dateToDay = {};
+            SESSIONS.forEach((s) => {
+              dateToDay[s.date] = s.day;
+            });
+            currentFilter = dateToDay[todayKey] || "all";
+            document.querySelectorAll(".tab").forEach((b) => {
+              b.classList.toggle("active", b.dataset.day === currentFilter);
+              b.disabled = eventOver;
+            });
+            document
+              .getElementById("dayTabs")
+              .classList.toggle("disabled", eventOver);
+
+            const featSubHeader = document.getElementById("featSubHeader");
+            if (featured) {
+              featSubHeader.hidden = false;
+              featSubHeader.textContent = featuredIsLive
+                ? "Happening Now"
+                : "Up Next";
+            } else {
+              featSubHeader.hidden = true;
+            }
+            document.getElementById("featSlot").innerHTML = featured
+              ? sessionCardHtml(featured, true)
+              : "";
+            renderGrid();
+
+            // Once the event is over, past sessions live in the main grid above
+            // instead of a separate "Past Sessions" section.
+            const pastSection = document.getElementById("pastSection");
+            if (!eventOver && past.length) {
+              pastSection.hidden = false;
+              document.getElementById("pastGrid").innerHTML = past
+                .map(pastCardHtml)
+                .join("");
+            } else {
+              pastSection.hidden = true;
+            }
+          }
+
+          function escAttr(str) {
+            const el = document.createElement("span");
+            el.textContent = str;
+            return el.innerHTML;
+          }
+
+          function escHtml(str) {
+            if (!str) return "";
+            const el = document.createElement("span");
+            el.textContent = str;
+            return el.innerHTML;
+          }
+
+          function isSafeUrl(url) {
+            if (!url) return false;
+            try {
+              const parsed = new URL(url, window.location.origin);
+              return ["http:", "https:", "mailto:"].includes(parsed.protocol);
+            } catch (e) {
+              return false;
+            }
+          }
+
+          function renderExplore() {
+            document.getElementById("exploreGrid").innerHTML = RESOURCES.map(
+              (r) => {
+                const safeUrl = isSafeUrl(r.url) ? escAttr(r.url) : '#';
+                const externalAttrs = isSafeUrl(r.url) ? ' target="_blank" rel="noopener"' : '';
+                const iconHtml = r.icon ? `<img src="${escAttr(r.icon)}" alt="">` : CHAT_ICON_SVG;
+                return `
+        <a href="${safeUrl}" class="res-card"${externalAttrs}>
+          <div class="icn">${iconHtml}</div>
+          <div class="r-text"><h3>${escAttr(r.title)}</h3><p>${escAttr(r.desc)}</p></div>
+        </a>`;
+              },
+            ).join("");
+          }
+
+          function renderSocials() {
+            document.getElementById("socialBand").innerHTML = SOCIALS.map(
+              (s) => {
+                const safeUrl = isSafeUrl(s.url) ? escAttr(s.url) : '#';
+                return `
+        <a href="${safeUrl}" class="social-link" target="_blank" rel="noopener" aria-label="${escAttr(s.name)}">
+          ${SOCIAL_ICONS[s.name] || ""}
+        </a>`;
+              },
+            ).join("");
+          }
+
+          
+
+          setupTabs();
+          renderAgenda();
+          renderExplore();
+          renderSocials();
+          
+    </script>
+  </body>
+</html>
