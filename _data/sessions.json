@@ -54,9 +54,9 @@
     "start": "14:15",
     "end": "14:45",
     "timeLabel": "2:15 PM – 2:45 PM",
-    "topic": "Behind the Scenes",
-    "title": "Behind the Builder Keynote: Demos Unpacked",
-    "desc": "Go behind-the-scenes of the keynote with an in-depth look at the demos, live Q&A, and sample apps you can take home to build on yourself.",
+    "topic": "Demos",
+    "title": "Builder Showcase: Lightning Demos",
+    "desc": "Watch quick builds from Christopher Miller, Workato Developer Advocate, volunteer to share what you're building and learn from fellow practitioners.",
     "url": "",
     "speakers": [
       {
@@ -156,7 +156,7 @@
     "end": "14:00",
     "timeLabel": "1:15 PM – 2:00 PM",
     "topic": "Demos",
-    "title": "Builder Showcase: Lightning Demos",
+    "title": "Builder Showcase: Lightning Demos (pt 2)",
     "desc": "Watch quick builds from Christopher Miller, Workato Developer Advocate, volunteer to share what you're building and learn from fellow practitioners.",
     "url": "",
     "speakers": [
