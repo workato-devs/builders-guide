@@ -8,7 +8,7 @@
     "timeLabel": "Starts 5:00 PM",
     "topic": "Networking",
     "title": "Builder Networking",
-    "desc": "",
+    "desc": "Meet Workato developers, India Community Champions, and fellow builders for informal conversation, practical tips, and new connections across the community.",
     "url": "",
     "speakers": []
   },
@@ -24,7 +24,7 @@
     "desc": "The brand new Workato Builders Community just launched, and we want to build it for YOU. Meet Workato Community Lead Aaron Weiss, hear our vision for Community, and tell us yours.",
     "url": "",
     "speakers": [
-      { "name": "Aaron Weiss", "role": "Community Lead", "company": "Workato", "photo": "" }
+      { "name": "Aaron Weiss", "role": "Community Lead", "company": "Workato", "photo": "src/portrait-aaron.png" }
     ]
   },
   {
@@ -54,9 +54,9 @@
     "start": "14:15",
     "end": "14:45",
     "timeLabel": "2:15 PM – 2:45 PM",
-    "topic": "Behind the Scenes",
-    "title": "Behind the Builder Keynote: Demos Unpacked",
-    "desc": "Go behind-the-scenes of the keynote with an in-depth look at the demos, live Q&A, and sample apps you can take home to build on yourself.",
+    "topic": "Demos",
+    "title": "Builder Showcase: Lightning Demos",
+    "desc": "Watch quick builds from Christopher Miller, Workato Developer Advocate, volunteer to share what you're building and learn from fellow practitioners.",
     "url": "",
     "speakers": [
       {
@@ -79,7 +79,7 @@
     "desc": "Explore Workato's AI research on LLM performance and specialized models for business processes. Meet the researchers and ask your questions.",
     "url": "",
     "speakers": [
-      { "name": "Thomas Joseph", "role": "", "company": "Workato", "photo": "" }
+      { "name": "Thomas Joseph", "role": "SVP, Agentic AI", "company": "Workato", "photo": "src/portrait-thomas.png" }
     ]
   },
   {
@@ -129,7 +129,7 @@
     "desc": "Explore Workato's AI research on LLM performance and specialized models for business processes. Meet the researchers and ask your questions.",
     "url": "",
     "speakers": [
-      { "name": "Thomas Joseph", "role": "", "company": "Workato", "photo": "" }
+      { "name": "Thomas Joseph", "role": "SVP, Agentic AI", "company": "Workato", "photo": "src/portrait-thomas.png" }
     ]
   },
   {
@@ -144,8 +144,8 @@
     "desc": "Get to know Dewy: go behind-the-scenes and hear stories from the creatives behind Workato's favorite mascot.",
     "url": "",
     "speakers": [
-      { "name": "Dominique", "role": "", "company": "Workato", "photo": "" },
-      { "name": "Ray", "role": "", "company": "Workato", "photo": "" }
+      { "name": "Domenique Sillett Buxton", "role": "Executive Creative Director", "company": "Workato", "photo": "src/portrait-domenique.png" },
+      { "name": "Ray Yuen", "role": "Art Director", "company": "Workato", "photo": "src/portrait-ray.png" }
     ]
   },
   {
@@ -156,7 +156,7 @@
     "end": "14:00",
     "timeLabel": "1:15 PM – 2:00 PM",
     "topic": "Demos",
-    "title": "Builder Showcase: Lightning Demos",
+    "title": "Builder Showcase: Lightning Demos (pt 2)",
     "desc": "Watch quick builds from Christopher Miller, Workato Developer Advocate, volunteer to share what you're building and learn from fellow practitioners.",
     "url": "",
     "speakers": [
@@ -177,10 +177,10 @@
     "timeLabel": "2:45 PM – 3:15 PM",
     "topic": "Demos",
     "title": "AWS Partner Demo: Details Coming Soon",
-    "desc": "Join AWS and Workato for a technical demo. The topic, presenter, and practical takeaway will be announced soon.",
+    "desc": "Join Sampath Kathirvel from AWS and Workato for a technical demo. The topic, presenter, and practical takeaway will be announced soon.",
     "url": "",
     "speakers": [
-      { "name": "Regan Roby", "role": "", "company": "AWS", "photo": "" }
+      { "name": "Sampath Kathirvel", "role": "Sr. Solutions Architect", "company": "AWS", "photo": "src/portrait-sampath.jpeg" }
     ]
   },
   {
