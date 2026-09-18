@@ -22,5 +22,17 @@
     "desc": "Sign up for the Developer Newsletter.",
     "url": "https://mktg.workato.com/workato-developer-updates.html",
     "icon": "src/icon-stay-in-touch.png"
+  },
+  {
+    "title": "Apply: Workato Community Legends",
+    "desc": "Get rewarded and recognized by Workato for creating content, hosting meetups, and engaging in the community.",
+    "url": "https://docs.google.com/forms/d/e/1FAIpQLSeoe2VeSPHC4RLCTvS98ozjsz9dNvzJIlLdvNWwvvrA_cxH4w/viewform?usp=dialog",
+    "icon": "src/icon-legends.png"
+  },
+  {
+    "title": "Video Content Sign Up",
+    "desc": "Sign up to record video content with our team at WOW",
+    "url": "https://docs.google.com/forms/d/e/1FAIpQLScHBYwL7uvFK77sA7CkhXs7_v_TS4EMyXp3R3OJx25pjHHeOA/viewform",
+    "icon": "src/icon-video-signup.png"
   }
 ]

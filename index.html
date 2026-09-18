@@ -507,7 +507,7 @@ layout: null
          /* GET INVOLVED grid — 4 across on desktop/responsive, 2x2 on
       compact, 1x4 (stacked) on mobile */
          .card-grid.involved-grid {
-           grid-template-columns: repeat(4, 1fr);
+           grid-template-columns: repeat(3, 1fr);
          }
          @media (max-width: 1149px) {
            .card-grid.involved-grid {
@@ -787,7 +787,6 @@ layout: null
          }
          .res-card {
            display: flex;
-           flex-direction: column;
            align-items: flex-start;
            gap: 22px;
            min-width: 0;
@@ -811,7 +810,7 @@ layout: null
          }
          .res-card .icn {
            width: 72px;
-           height: 72px;
+           align-self: stretch;
            flex-shrink: 0;
          }
          .res-card .icn svg,
