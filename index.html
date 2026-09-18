@@ -1087,7 +1087,7 @@ layout: null
           }
 
           function roleLine(sp) {
-            return [sp.role, sp.company].filter(Boolean).join(", ");
+            return [sp.role, sp.company].filter(Boolean).map(escHtml).join(", ");
           }
 
           function speakersMiniHtml(speakers) {
@@ -1096,7 +1096,7 @@ layout: null
                 (sp) => `
         <div class="s-mini">
           ${avatarHtml(sp, 40)}
-          <div><div class="s-name">${sp.name}</div><div class="s-role">${roleLine(sp)}</div></div>
+          <div><div class="s-name">${escHtml(sp.name)}</div><div class="s-role">${roleLine(sp)}</div></div>
         </div>`,
               )
               .join("")}</div>`;
@@ -1108,8 +1108,8 @@ layout: null
                 (sp) => `
         <div class="speaker-col">
           ${avatarHtml(sp, 130)}
-          <span class="s-name">${sp.name}</span>
-          <span class="s-role">${sp.role ? sp.role + "<br>" : ""}${sp.company}</span>
+          <span class="s-name">${escHtml(sp.name)}</span>
+          <span class="s-role">${sp.role ? escHtml(sp.role) + "<br>" : ""}${escHtml(sp.company)}</span>
         </div>`,
               )
               .join("")}</div>`;
@@ -1121,13 +1121,13 @@ layout: null
 
           function sessionCardHtml(s, showDay, inGrid = false) {
             const timeLine = showDay
-              ? `${s.dayShort} · ${s.timeLabel}`
-              : s.timeLabel;
+              ? `${escHtml(s.dayShort)} · ${escHtml(s.timeLabel)}`
+              : escHtml(s.timeLabel);
             const isFeatured = s.id === featuredId && !inGrid;
             const topicHtml = s.topic
-              ? `<div class="s-card-topic">// ${s.topic.toLowerCase()}</div>`
+              ? `<div class="s-card-topic">// ${escHtml(s.topic.toLowerCase())}</div>`
               : "";
-            const descHtml = s.desc ? `<p class="s-card-desc">${s.desc}</p>` : "";
+            const descHtml = s.desc ? `<p class="s-card-desc">${escHtml(s.desc)}</p>` : "";
             const linkHtml = hasLink(s)
               ? `<a href="${escAttr(s.url)}" class="text-link">Learn more ${CHEVRON_SVG}</a>`
               : "";
@@ -1138,7 +1138,7 @@ layout: null
             <div class="s-card-main">
               ${topicHtml}
               <div class="s-card-time">${timeLine}</div>
-              <h3>${s.title}</h3>
+              <h3>${escHtml(s.title)}</h3>
               ${descHtml}
               ${linkHtml}
             </div>
@@ -1150,7 +1150,7 @@ layout: null
             return `<div class="s-card">
         ${topicHtml}
         <div class="s-card-time">${timeLine}</div>
-        <h3>${s.title}</h3>
+        <h3>${escHtml(s.title)}</h3>
         ${descHtml}
         ${s.speakers.length ? speakersMiniHtml(s.speakers) : ""}
         ${linkHtml}
@@ -1159,17 +1159,17 @@ layout: null
 
           function pastCardHtml(s) {
             const topicHtml = s.topic
-              ? `<div class="s-card-topic">// ${s.topic.toLowerCase()}</div>`
+              ? `<div class="s-card-topic">// ${escHtml(s.topic.toLowerCase())}</div>`
               : "";
-            const descHtml = s.desc ? `<p class="s-card-desc">${s.desc}</p>` : "";
+            const descHtml = s.desc ? `<p class="s-card-desc">${escHtml(s.desc)}</p>` : "";
             const linkHtml = hasLink(s)
               ? `<a href="${escAttr(s.url)}" class="text-link">Watch recording ${CHEVRON_SVG}</a>`
               : "";
             return `<div class="s-card s-card-past">
         <div class="video-slot">${PLAY_SVG}<span>Recording coming soon</span></div>
         ${topicHtml}
-        <div class="s-card-time">${s.day} · ${s.timeLabel}</div>
-        <h3>${s.title}</h3>
+        <div class="s-card-time">${escHtml(s.day)} · ${escHtml(s.timeLabel)}</div>
+        <h3>${escHtml(s.title)}</h3>
         ${descHtml}
         ${s.speakers.length ? speakersMiniHtml(s.speakers) : ""}
         ${linkHtml}
@@ -1272,6 +1272,13 @@ layout: null
           }
 
           function escAttr(str) {
+            const el = document.createElement("span");
+            el.textContent = str;
+            return el.innerHTML;
+          }
+
+          function escHtml(str) {
+            if (!str) return "";
             const el = document.createElement("span");
             el.textContent = str;
             return el.innerHTML;
