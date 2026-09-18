@@ -1,20 +1,32 @@
 [
   {
-    "title": "Community",
+    "title": "Join The Community",
     "desc": "Connect with other Workato builders before, during, and after WOW.",
     "url": "https://community.workato.com/",
     "icon": "src/icon-community.png"
   },
   {
-    "title": "Events Calendar",
-    "desc": "Discover developer and builder events for the Workato Community",
+    "title": "Attend Workato Events",
+    "desc": "See every upcoming Workato meetup, webinar, and conference in one place.",
     "url": "https://luma.com/workatodevs",
     "icon": "src/icon-events-calendar.png"
   },
   {
-    "title": "Self Serve",
-    "desc": "Spin up a trial and start building your own recipes today.",
+    "title": "Get Hands On",
+    "desc": "Spin up your own Developer Account and start building today.",
     "url": "https://www.workato.com/request_demo",
     "icon": "src/icon-self-serve.png"
+  },
+  {
+    "title": "Stay in Touch",
+    "desc": "Sign up for the Developer Newsletter.",
+    "url": "",
+    "icon": ""
+  },
+  {
+    "title": "Follow Us",
+    "desc": "Get updates from the Workato builder team on socials.",
+    "url": "",
+    "icon": ""
   }
 ]
