@@ -953,7 +953,7 @@
 
           function avatarHtml(sp, size) {
             if (sp.photo) {
-              return `<div class="avatar" style="width:${size}px;height:${size}px;"><img src="${sp.photo}" alt="${sp.name}"></div>`;
+              return `<div class="avatar" style="width:${size}px;height:${size}px;"><img src="${escAttr(sp.photo)}" alt="${escAttr(sp.name)}"></div>`;
             }
             return `<div class="avatar avatar-placeholder" style="width:${size}px;height:${size}px;"><img src="src/dewy-avatar-placeholder.png" alt="Speaker photo coming soon"></div>`;
           }
@@ -988,7 +988,7 @@
           }
 
           function hasLink(s) {
-            return !!s.url && s.url !== "#";
+            return !!s.url && s.url !== "#" && isSafeUrl(s.url);
           }
 
           function sessionCardHtml(s, showDay, inGrid = false) {
@@ -1001,7 +1001,7 @@
               : "";
             const descHtml = s.desc ? `<p class="s-card-desc">${s.desc}</p>` : "";
             const linkHtml = hasLink(s)
-              ? `<a href="${s.url}" class="text-link">Learn more ${CHEVRON_SVG}</a>`
+              ? `<a href="${escAttr(s.url)}" class="text-link">Learn more ${CHEVRON_SVG}</a>`
               : "";
 
             if (isFeatured) {
@@ -1035,7 +1035,7 @@
               : "";
             const descHtml = s.desc ? `<p class="s-card-desc">${s.desc}</p>` : "";
             const linkHtml = hasLink(s)
-              ? `<a href="${s.url}" class="text-link">Watch recording ${CHEVRON_SVG}</a>`
+              ? `<a href="${escAttr(s.url)}" class="text-link">Watch recording ${CHEVRON_SVG}</a>`
               : "";
             return `<div class="s-card s-card-past">
         <div class="video-slot">${PLAY_SVG}<span>Recording coming soon</span></div>
@@ -1143,22 +1143,46 @@
             }
           }
 
+          function escAttr(str) {
+            const el = document.createElement("span");
+            el.textContent = str;
+            return el.innerHTML;
+          }
+
+          function isSafeUrl(url) {
+            if (!url) return false;
+            try {
+              const parsed = new URL(url, window.location.origin);
+              return ["http:", "https:", "mailto:"].includes(parsed.protocol);
+            } catch (e) {
+              return false;
+            }
+          }
+
           function renderExplore() {
             document.getElementById("exploreGrid").innerHTML = RESOURCES.map(
-              (r) => `
-        <a href="${r.url || '#'}" class="res-card"${r.url ? ' target="_blank" rel="noopener"' : ''}>
-          <div class="icn">${r.icon ? `<img src="${r.icon}" alt="">` : CHAT_ICON_SVG}</div>
-          <div class="r-text"><h3>${r.title}</h3><p>${r.desc}</p></div>
-        </a>`,
+              (r) => {
+                const safeUrl = isSafeUrl(r.url) ? escAttr(r.url) : '#';
+                const externalAttrs = isSafeUrl(r.url) ? ' target="_blank" rel="noopener"' : '';
+                const iconHtml = r.icon ? `<img src="${escAttr(r.icon)}" alt="">` : CHAT_ICON_SVG;
+                return `
+        <a href="${safeUrl}" class="res-card"${externalAttrs}>
+          <div class="icn">${iconHtml}</div>
+          <div class="r-text"><h3>${escAttr(r.title)}</h3><p>${escAttr(r.desc)}</p></div>
+        </a>`;
+              },
             ).join("");
           }
 
           function renderSocials() {
             document.getElementById("socialBand").innerHTML = SOCIALS.map(
-              (s) => `
-        <a href="${s.url}" class="social-link" target="_blank" rel="noopener" aria-label="${s.name}">
+              (s) => {
+                const safeUrl = isSafeUrl(s.url) ? escAttr(s.url) : '#';
+                return `
+        <a href="${safeUrl}" class="social-link" target="_blank" rel="noopener" aria-label="${escAttr(s.name)}">
           ${SOCIAL_ICONS[s.name] || ""}
-        </a>`,
+        </a>`;
+              },
             ).join("");
           }
 
