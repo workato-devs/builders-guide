@@ -8,6 +8,27 @@ layout: null
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WOW 2026 Builder Guide — Workato</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ '/' | absolute_url }}" />
+    <meta property="og:title" content="WOW 2026 Builder Guide — Workato" />
+    <meta
+      property="og:description"
+      content="Everything you need to find our sessions, meet the speakers, and get the most out of WOW as a builder."
+    />
+    <meta
+      property="og:image"
+      content="{{ '/src/social-share.jpg' | absolute_url }}"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="WOW 2026 Builder Guide — Workato" />
+    <meta
+      name="twitter:description"
+      content="Everything you need to find our sessions, meet the speakers, and get the most out of WOW as a builder."
+    />
+    <meta
+      name="twitter:image"
+      content="{{ '/src/social-share.jpg' | absolute_url }}"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -133,6 +154,7 @@ layout: null
            display: flex;
            align-items: flex-start;
            justify-content: center;
+           overflow: hidden;
            background-color: var(--dark-blue);
            background-image: url("src/hero-vegas-blue-fill.svg");
            background-repeat: no-repeat;
@@ -147,6 +169,7 @@ layout: null
       (a plain outline can't be filled, since it paints over whatever sits
       behind the box, so this uses two real nested boxes instead). */
          .hero-box-frame {
+           position: relative;
            max-width: 764px;
            width: 100%;
            margin: 0 auto;
@@ -157,6 +180,64 @@ layout: null
            box-shadow:
              0 0 12px rgba(255, 202, 0, 0.6),
              0 0 26px rgba(255, 202, 0, 0.3);
+         }
+         /* Dewy sits just right of the hero text box, standing in the
+      foreground at the bottom of the hero band — pinned low enough that
+      .hero-band's overflow:hidden crops off its bottom ~5%, like it's
+      planted right at the edge of frame. The source gif (dewy-hero-bonk.gif)
+      is pre-cropped to its actual character bounds with a small margin, so
+      the bottom offset only needs to cover that margin plus the ~5% crop
+      (no more guessing past a huge transparent canvas). Positioned relative
+      to .hero-band (not the box) so it pins to the whole hero, not just the
+      box frame; the box is centered and capped at 764px wide once Dewy is
+      shown, so its right edge is a fixed calc() from band center. Only
+      shown once the hero band is wide enough that Dewy's width + gap fits
+      beside the (max-width) box without overflowing the band. */
+         .hero-dewy {
+           display: none;
+           position: absolute;
+           left: calc(50% + 382px + 24px);
+           bottom: -29px;
+           width: 200px;
+           height: auto;
+           pointer-events: none;
+         }
+         /* A real element (not a border) so it paints in its own stacking
+      layer above the background artwork AND above Dewy, instead of sitting
+      behind Dewy where a plain border-bottom on .hero-band would land. */
+         .hero-bottom-stroke {
+           position: absolute;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           height: 2px;
+           background: var(--teal);
+           z-index: 5;
+           pointer-events: none;
+         }
+         /* Desktop + Responsive (1150px+): Dewy stands beside the box, per
+      the left calc() above — that formula always starts 24px clear of the
+      frame's right edge, so it structurally can't overlap the box/text no
+      matter how the gap beside the box shrinks as the viewport narrows. */
+         @media (min-width: 1150px) {
+           .hero-dewy {
+             display: block;
+           }
+         }
+         /* Compact and Mobile (<1150px): the box is close to (or exactly)
+      full-width here, so there's no side gap left to stand in — move Dewy
+      below/center instead of beside the box. The extra band padding-bottom
+      below carves out standing room so Dewy's full height clears the box's
+      bottom edge instead of overlapping the text/buttons. */
+         @media (max-width: 1149px) {
+           .hero-band {
+             padding-bottom: 220px;
+           }
+           .hero-dewy {
+             display: block;
+             left: 50%;
+             transform: translateX(-50%);
+           }
          }
          /* Marching-ants border — chasing dashes around the perimeter, like a
       theater/marquee sign. Border is transparent (kept only to hold the box
@@ -294,14 +375,16 @@ layout: null
          }
 
          @media (max-width: 640px) {
-           /* Fixed px height (not vh) on small screens — mobile browsers size vh
-        against the viewport with the address bar collapsed, so vh renders
+           /* Fixed px min-height (not vh) on small screens — mobile browsers size
+        vh against the viewport with the address bar collapsed, so vh renders
         taller than what's actually visible on load. 600px ≈ 3/4 of a
-        typical ~800px mobile screen height. Box padding/logo size are just
-        a modest cosmetic reduction, not part of the fluid system above. */
+        typical ~800px mobile screen height. This is a floor, not a cap —
+        if the box's content needs more room than that, the band grows to
+        keep it fully contained rather than letting it overflow. Box
+        padding/logo size are just a modest cosmetic reduction, not part of
+        the fluid system above. */
            .hero-band {
-             height: 600px;
-             max-height: 600px;
+             min-height: 600px;
            }
            .hero-box {
              padding: 20px 16px;
@@ -372,6 +455,9 @@ layout: null
          }
          .sub-header-row .sub-header {
            margin: 0;
+         }
+         #featSubHeader {
+           font-size: 24px;
          }
          .sub-header-row .day-tabs {
            margin-bottom: 0;
@@ -478,6 +564,22 @@ layout: null
            }
          }
 
+         /* GET INVOLVED grid — 4 across on desktop/responsive, 2x2 on
+      compact, 1x4 (stacked) on mobile */
+         .card-grid.involved-grid {
+           grid-template-columns: repeat(3, 1fr);
+         }
+         @media (max-width: 1149px) {
+           .card-grid.involved-grid {
+             grid-template-columns: repeat(2, 1fr);
+           }
+         }
+         @media (max-width: 959px) {
+           .card-grid.involved-grid {
+             grid-template-columns: 1fr;
+           }
+         }
+
          /* Subtle motion — cards fade/slide in as they render, with a light
       stagger across the first few, then lift slightly on hover. */
          @keyframes fadeInUp {
@@ -563,7 +665,7 @@ layout: null
            font-size: 19px;
            line-height: 1.3;
            color: #fff;
-           margin-bottom: 14px;
+           margin-bottom: 10px;
          }
          .s-card-desc {
            font-size: 14px;
@@ -618,6 +720,11 @@ layout: null
          .s-card-featured h3 {
            max-width: 640px;
            font-size: 26px;
+         }
+         .s-card-featured .s-card-desc {
+           font-size: 16px;
+           line-height: 1.6;
+           max-width: 640px;
          }
          .speakers-row {
            display: flex;
@@ -742,6 +849,7 @@ layout: null
            display: flex;
            align-items: flex-start;
            gap: 22px;
+           min-width: 0;
            background: var(--card-blue-soft);
            border: 1px solid var(--card-line);
            border-radius: 14px;
@@ -771,6 +879,9 @@ layout: null
            height: 100%;
            object-fit: contain;
            display: block;
+         }
+         .res-card .r-text {
+           min-width: 0;
          }
          .res-card .r-text h3 {
            font-size: 16px;
@@ -950,13 +1061,15 @@ layout: null
             </a>
             <a href="#explore" class="hero-btn">
               Get Involved
-              <svg viewBox="0 -960 960 960" fill="currentColor">
-                <path d="M240-280 40-480l200-200 56 56-143 144 143 144-56 56Zm178 132-76-24 200-640 76 24-200 640Zm302-132-56-56 143-144-143-144 56-56 200 200-200 200Z" />
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
               </svg>
             </a>
           </div>
         </div>
       </div>
+      <img class="hero-dewy" src="src/dewy-hero-bonk.gif" alt="" />
+      <div class="hero-bottom-stroke"></div>
     </header>
 
     <!-- AGENDA (rendered by JS — see SESSIONS below) -->
@@ -993,11 +1106,11 @@ layout: null
     <!-- EXPLORE (rendered by JS — see RESOURCES below) -->
     <div class="container explore-section">
       <h2 class="section-h2 neon-heading" id="explore">Get Involved
-        <svg viewBox="0 -960 960 960" fill="currentColor">
-          <path d="M240-280 40-480l200-200 56 56-143 144 143 144-56 56Zm178 132-76-24 200-640 76 24-200 640Zm302-132-56-56 143-144-143-144 56-56 200 200-200 200Z" />
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
         </svg>
       </h2>
-      <div id="exploreGrid" class="card-grid"></div>
+      <div id="exploreGrid" class="card-grid involved-grid"></div>
     </div>
 
     <!-- SOCIAL BAND (rendered by JS — see SOCIALS below) -->
@@ -1095,7 +1208,7 @@ layout: null
               .map(
                 (sp) => `
         <div class="s-mini">
-          ${avatarHtml(sp, 40)}
+          ${avatarHtml(sp, 80)}
           <div><div class="s-name">${escHtml(sp.name)}</div><div class="s-role">${roleLine(sp)}</div></div>
         </div>`,
               )

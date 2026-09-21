@@ -15,18 +15,24 @@
     "title": "Get Hands On",
     "desc": "Spin up your own Developer Account and start building today.",
     "url": "https://www.workato.com/request_demo",
-    "icon": "src/icon-self-serve.png"
+    "icon": "src/icon-get-hands-on.png"
   },
   {
     "title": "Stay in Touch",
     "desc": "Sign up for the Developer Newsletter.",
-    "url": "",
-    "icon": ""
+    "url": "https://mktg.workato.com/workato-developer-updates.html",
+    "icon": "src/icon-stay-in-touch.png"
   },
   {
-    "title": "Follow Us",
-    "desc": "Get updates from the Workato builder team on socials.",
-    "url": "",
-    "icon": ""
+    "title": "Apply: Workato Community Legends",
+    "desc": "Get rewarded and recognized by Workato for creating content, hosting meetups, and engaging in the community.",
+    "url": "https://docs.google.com/forms/d/e/1FAIpQLSeoe2VeSPHC4RLCTvS98ozjsz9dNvzJIlLdvNWwvvrA_cxH4w/viewform?usp=dialog",
+    "icon": "src/icon-legends.png"
+  },
+  {
+    "title": "Video Content Sign Up",
+    "desc": "Sign up to record video content with our team at WOW",
+    "url": "https://docs.google.com/forms/d/e/1FAIpQLScHBYwL7uvFK77sA7CkhXs7_v_TS4EMyXp3R3OJx25pjHHeOA/viewform",
+    "icon": "src/icon-video-signup.png"
   }
 ]
