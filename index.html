@@ -4,6 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WOW 2026 Builder Guide — Workato</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://workato-devs.github.io/builders-guide/" />
+    <meta property="og:title" content="WOW 2026 Builder Guide — Workato" />
+    <meta
+      property="og:description"
+      content="Everything you need to find our sessions, meet the speakers, and get the most out of WOW as a builder."
+    />
+    <meta
+      property="og:image"
+      content="https://workato-devs.github.io/builders-guide/src/social-share.jpg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="WOW 2026 Builder Guide — Workato" />
+    <meta
+      name="twitter:description"
+      content="Everything you need to find our sessions, meet the speakers, and get the most out of WOW as a builder."
+    />
+    <meta
+      name="twitter:image"
+      content="https://workato-devs.github.io/builders-guide/src/social-share.jpg"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -129,6 +150,7 @@
            display: flex;
            align-items: flex-start;
            justify-content: center;
+           overflow: hidden;
            background-color: var(--dark-blue);
            background-image: url("src/hero-vegas-blue-fill.svg");
            background-repeat: no-repeat;
@@ -143,6 +165,7 @@
       (a plain outline can't be filled, since it paints over whatever sits
       behind the box, so this uses two real nested boxes instead). */
          .hero-box-frame {
+           position: relative;
            max-width: 764px;
            width: 100%;
            margin: 0 auto;
@@ -153,6 +176,64 @@
            box-shadow:
              0 0 12px rgba(255, 202, 0, 0.6),
              0 0 26px rgba(255, 202, 0, 0.3);
+         }
+         /* Dewy sits just right of the hero text box, standing in the
+      foreground at the bottom of the hero band — pinned low enough that
+      .hero-band's overflow:hidden crops off its bottom ~5%, like it's
+      planted right at the edge of frame. The source gif (dewy-hero-bonk.gif)
+      is pre-cropped to its actual character bounds with a small margin, so
+      the bottom offset only needs to cover that margin plus the ~5% crop
+      (no more guessing past a huge transparent canvas). Positioned relative
+      to .hero-band (not the box) so it pins to the whole hero, not just the
+      box frame; the box is centered and capped at 764px wide once Dewy is
+      shown, so its right edge is a fixed calc() from band center. Only
+      shown once the hero band is wide enough that Dewy's width + gap fits
+      beside the (max-width) box without overflowing the band. */
+         .hero-dewy {
+           display: none;
+           position: absolute;
+           left: calc(50% + 382px + 24px);
+           bottom: -29px;
+           width: 200px;
+           height: auto;
+           pointer-events: none;
+         }
+         /* A real element (not a border) so it paints in its own stacking
+      layer above the background artwork AND above Dewy, instead of sitting
+      behind Dewy where a plain border-bottom on .hero-band would land. */
+         .hero-bottom-stroke {
+           position: absolute;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           height: 2px;
+           background: var(--teal);
+           z-index: 5;
+           pointer-events: none;
+         }
+         /* Desktop + Responsive (1150px+): Dewy stands beside the box, per
+      the left calc() above — that formula always starts 24px clear of the
+      frame's right edge, so it structurally can't overlap the box/text no
+      matter how the gap beside the box shrinks as the viewport narrows. */
+         @media (min-width: 1150px) {
+           .hero-dewy {
+             display: block;
+           }
+         }
+         /* Compact and Mobile (<1150px): the box is close to (or exactly)
+      full-width here, so there's no side gap left to stand in — move Dewy
+      below/center instead of beside the box. The extra band padding-bottom
+      below carves out standing room so Dewy's full height clears the box's
+      bottom edge instead of overlapping the text/buttons. */
+         @media (max-width: 1149px) {
+           .hero-band {
+             padding-bottom: 220px;
+           }
+           .hero-dewy {
+             display: block;
+             left: 50%;
+             transform: translateX(-50%);
+           }
          }
          /* Marching-ants border — chasing dashes around the perimeter, like a
       theater/marquee sign. Border is transparent (kept only to hold the box
@@ -290,14 +371,16 @@
          }
 
          @media (max-width: 640px) {
-           /* Fixed px height (not vh) on small screens — mobile browsers size vh
-        against the viewport with the address bar collapsed, so vh renders
+           /* Fixed px min-height (not vh) on small screens — mobile browsers size
+        vh against the viewport with the address bar collapsed, so vh renders
         taller than what's actually visible on load. 600px ≈ 3/4 of a
-        typical ~800px mobile screen height. Box padding/logo size are just
-        a modest cosmetic reduction, not part of the fluid system above. */
+        typical ~800px mobile screen height. This is a floor, not a cap —
+        if the box's content needs more room than that, the band grows to
+        keep it fully contained rather than letting it overflow. Box
+        padding/logo size are just a modest cosmetic reduction, not part of
+        the fluid system above. */
            .hero-band {
-             height: 600px;
-             max-height: 600px;
+             min-height: 600px;
            }
            .hero-box {
              padding: 20px 16px;
@@ -368,6 +451,9 @@
          }
          .sub-header-row .sub-header {
            margin: 0;
+         }
+         #featSubHeader {
+           font-size: 24px;
          }
          .sub-header-row .day-tabs {
            margin-bottom: 0;
@@ -474,6 +560,22 @@
            }
          }
 
+         /* GET INVOLVED grid — 4 across on desktop/responsive, 2x2 on
+      compact, 1x4 (stacked) on mobile */
+         .card-grid.involved-grid {
+           grid-template-columns: repeat(3, 1fr);
+         }
+         @media (max-width: 1149px) {
+           .card-grid.involved-grid {
+             grid-template-columns: repeat(2, 1fr);
+           }
+         }
+         @media (max-width: 959px) {
+           .card-grid.involved-grid {
+             grid-template-columns: 1fr;
+           }
+         }
+
          /* Subtle motion — cards fade/slide in as they render, with a light
       stagger across the first few, then lift slightly on hover. */
          @keyframes fadeInUp {
@@ -559,7 +661,7 @@
            font-size: 19px;
            line-height: 1.3;
            color: #fff;
-           margin-bottom: 14px;
+           margin-bottom: 10px;
          }
          .s-card-desc {
            font-size: 14px;
@@ -614,6 +716,11 @@
          .s-card-featured h3 {
            max-width: 640px;
            font-size: 26px;
+         }
+         .s-card-featured .s-card-desc {
+           font-size: 16px;
+           line-height: 1.6;
+           max-width: 640px;
          }
          .speakers-row {
            display: flex;
@@ -738,6 +845,7 @@
            display: flex;
            align-items: flex-start;
            gap: 22px;
+           min-width: 0;
            background: var(--card-blue-soft);
            border: 1px solid var(--card-line);
            border-radius: 14px;
@@ -767,6 +875,9 @@
            height: 100%;
            object-fit: contain;
            display: block;
+         }
+         .res-card .r-text {
+           min-width: 0;
          }
          .res-card .r-text h3 {
            font-size: 16px;
@@ -901,13 +1012,15 @@
             </a>
             <a href="#explore" class="hero-btn">
               Get Involved
-              <svg viewBox="0 -960 960 960" fill="currentColor">
-                <path d="M240-280 40-480l200-200 56 56-143 144 143 144-56 56Zm178 132-76-24 200-640 76 24-200 640Zm302-132-56-56 143-144-143-144 56-56 200 200-200 200Z" />
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
               </svg>
             </a>
           </div>
         </div>
       </div>
+      <img class="hero-dewy" src="src/dewy-hero-bonk.gif" alt="" />
+      <div class="hero-bottom-stroke"></div>
     </header>
 
     <!-- AGENDA (rendered by JS — see SESSIONS below) -->
@@ -944,11 +1057,11 @@
     <!-- EXPLORE (rendered by JS — see RESOURCES below) -->
     <div class="container explore-section">
       <h2 class="section-h2 neon-heading" id="explore">Get Involved
-        <svg viewBox="0 -960 960 960" fill="currentColor">
-          <path d="M240-280 40-480l200-200 56 56-143 144 143 144-56 56Zm178 132-76-24 200-640 76 24-200 640Zm302-132-56-56 143-144-143-144 56-56 200 200-200 200Z" />
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
         </svg>
       </h2>
-      <div id="exploreGrid" class="card-grid"></div>
+      <div id="exploreGrid" class="card-grid involved-grid"></div>
     </div>
 
     <!-- SOCIAL BAND (rendered by JS — see SOCIALS below) -->
@@ -966,7 +1079,7 @@
        _data/resources.json at Jekyll build time. Edit those files to
        update the agenda — no need to touch this file. */
           const SESSIONS = [{"day":"Tuesday Sep 22","dayShort":"Tue","date":"2026-09-22","start":"17:00","end":"17:45","timeLabel":"5:00 PM – 5:45 PM","topic":"Connect","title":"Builder Networking","desc":"Meet Workato developers and fellow builders for informal conversation, practical tips, and new connections across the community.","url":"","speakers":[{"name":"Aaron Weiss","role":"Community Lead","company":"Workato","photo":"src/portrait-aaron.png"}]},{"day":"Wednesday Sep 23","dayShort":"Wed","date":"2026-09-23","start":"12:00","end":"12:45","timeLabel":"12:00 PM – 12:45 PM","topic":"Connect","title":"Be the Future of Workato's Community","desc":"The brand new Workato Builders Community just launched, and we want to build it for YOU. Meet Workato Community Lead Aaron Weiss, hear our vision for Community, and tell us yours.","url":"","speakers":[{"name":"Aaron Weiss","role":"Community Lead","company":"Workato","photo":"src/portrait-aaron.png"}]},{"day":"Wednesday Sep 23","dayShort":"Wed","date":"2026-09-23","start":"13:00","end":"13:45","timeLabel":"1:00 PM – 1:45 PM","topic":"Learn","title":"Lessons from Building Agent Teams","desc":"Chloe, Matt, Fischer and Shubham share candid lessons from building agent teams: what failed, what they'd change, and a few deep-dive details about how they built what they did. Bring your questions.","url":"","speakers":[{"name":"Chloe Condon","role":"Senior Developer Advocate","company":"Workato","photo":"src/portrait-chloe.jpeg"}]},{"day":"Wednesday Sep 23","dayShort":"Wed","date":"2026-09-23","start":"14:15","end":"15:00","timeLabel":"2:15 PM – 3:00 PM","topic":"Build","title":"Builder Showcase: Lightning Demos","desc":"Watch quick builds from Christopher Miller, Workato Developer Advocate, volunteer to share what you're building, and learn from fellow practitioners.","url":"","speakers":[{"name":"Christopher Miller","role":"Staff AI Software Engineer","company":"Workato","photo":"src/portrait-chris.jpeg"}]},{"day":"Wednesday Sep 23","dayShort":"Wed","date":"2026-09-23","start":"15:15","end":"16:00","timeLabel":"3:15 PM – 4:00 PM","topic":"Learn","title":"Workato AI Research Spotlight","desc":"Explore Workato's AI research on LLM performance and specialized models for business processes. Meet the researchers and ask your questions.","url":"","speakers":[{"name":"Thomas Joseph","role":"SVP, Agentic AI","company":"Workato","photo":"src/portrait-thomas.png"}]},{"day":"Wednesday Sep 23","dayShort":"Wed","date":"2026-09-23","start":"16:45","end":"17:30","timeLabel":"4:45 PM – 5:30 PM","topic":"Connect","title":"OpenAI + Workato Builder Happy Hour","desc":"Network with fellow builders over happy hour, meet the OpenAI product and Workato DevRel teams, and catch a surprise demo or two.","url":"","speakers":[{"name":"Zayne Turner","role":"VP, Developer Relations","company":"Workato","photo":"src/portrait-zayne.jpeg"}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"10:45","end":"11:30","timeLabel":"10:45 AM – 11:30 AM","topic":"Learn","title":"Community Champions: Learning Better, Together","desc":"Hear how Workato community champions in India share knowledge, build relationships, and sharpen their technical skills—then take ideas back to your own practice.","url":"","speakers":[{"name":"India Team","role":"","company":"Workato","photo":""}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"11:30","end":"12:00","timeLabel":"11:30 AM – 12:00 PM","topic":"Learn","title":"Workato AI Research Spotlight","desc":"Explore Workato's AI research on LLM performance and specialized models for business processes. Meet the researchers and ask your questions.","url":"","speakers":[{"name":"Thomas Joseph","role":"SVP, Agentic AI","company":"Workato","photo":"src/portrait-thomas.png"}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"12:30","end":"13:15","timeLabel":"12:30 PM – 1:15 PM","topic":"Build","title":"Meet the Creators of Dewy","desc":"Get to know Dewy: go behind-the-scenes and hear stories from the creatives behind Workato's favorite mascot.","url":"","speakers":[{"name":"Domenique Sillett Buxton","role":"Executive Creative Director","company":"Workato","photo":"src/portrait-domenique.png"},{"name":"Ray Yuen","role":"Art Director","company":"Workato","photo":"src/portrait-ray.png"}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"13:15","end":"14:00","timeLabel":"1:15 PM – 2:00 PM","topic":"Build","title":"Builder Showcase: Lightning Demos (pt 2)","desc":"Watch quick builds from Christopher Miller, Workato Developer Advocate, volunteer to share what you're building, and learn from fellow practitioners.","url":"","speakers":[{"name":"Christopher Miller","role":"Staff AI Software Engineer","company":"Workato","photo":"src/portrait-chris.jpeg"}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"14:45","end":"15:30","timeLabel":"2:45 PM – 3:30 PM","topic":"Learn","title":"AWS Partner Demo: Details Coming Soon","desc":"Join Sampath Kathirvel from AWS and Workato for a technical demo. The topic, presenter, and practical takeaway will be announced soon.","url":"","speakers":[{"name":"Sampath Kathirvel","role":"Sr. Solutions Architect","company":"AWS","photo":"src/portrait-sampath.jpeg"}]},{"day":"Thursday Sep 24","dayShort":"Thu","date":"2026-09-24","start":"15:30","end":"16:15","timeLabel":"3:30 PM – 4:15 PM","topic":"Connect","title":"Builder Networking (pt. 2)","desc":"Join Workato developers, the India team, and fellow builders for a final round of casual conversation, hands-on tips, and new connections to take with you as the conference comes to a close.","url":"","speakers":[]}];
-          const RESOURCES = [{"title":"Join The Community","desc":"Connect with other Workato builders before, during, and after WOW.","url":"https://community.workato.com/","icon":"src/icon-community.png"},{"title":"Attend Workato Events","desc":"See every upcoming Workato meetup, webinar, and conference in one place.","url":"https://luma.com/workatodevs","icon":"src/icon-events-calendar.png"},{"title":"Get Hands On","desc":"Spin up your own Developer Account and start building today.","url":"https://www.workato.com/request_demo","icon":"src/icon-self-serve.png"},{"title":"Stay in Touch","desc":"Sign up for the Developer Newsletter.","url":"","icon":""},{"title":"Follow Us","desc":"Get updates from the Workato builder team on socials.","url":"","icon":""}];
+          const RESOURCES = [{"title":"Join The Community","desc":"Connect with other Workato builders before, during, and after WOW.","url":"https://community.workato.com/","icon":"src/icon-community.png"},{"title":"Attend Workato Events","desc":"See every upcoming Workato meetup, webinar, and conference in one place.","url":"https://luma.com/workatodevs","icon":"src/icon-events-calendar.png"},{"title":"Get Hands On","desc":"Spin up your own Developer Account and start building today.","url":"https://www.workato.com/request_demo","icon":"src/icon-get-hands-on.png"},{"title":"Stay in Touch","desc":"Sign up for the Developer Newsletter.","url":"https://mktg.workato.com/workato-developer-updates.html","icon":"src/icon-stay-in-touch.png"},{"title":"Apply: Workato Community Legends","desc":"Get rewarded and recognized by Workato for creating content, hosting meetups, and engaging in the community.","url":"https://docs.google.com/forms/d/e/1FAIpQLSeoe2VeSPHC4RLCTvS98ozjsz9dNvzJIlLdvNWwvvrA_cxH4w/viewform?usp=dialog","icon":"src/icon-legends.png"},{"title":"Video Content Sign Up","desc":"Sign up to record video content with our team at WOW","url":"https://docs.google.com/forms/d/e/1FAIpQLScHBYwL7uvFK77sA7CkhXs7_v_TS4EMyXp3R3OJx25pjHHeOA/viewform","icon":"src/icon-video-signup.png"}];
           const SOCIALS = [{"name":"LinkedIn","url":"https://www.linkedin.com/showcase/workato-developers/"},{"name":"Instagram","url":"https://www.instagram.com/workatohq/?hl=en"},{"name":"YouTube","url":"https://www.youtube.com/channel/UC23xuvk2DoIlNWv3uAGb18w"},{"name":"X","url":"https://x.com/Workato"},{"name":"Facebook","url":"https://www.facebook.com/workato/"},{"name":"GitHub","url":"https://github.com/workato-devs"}];
 
           const CHEVRON_SVG =
@@ -1020,7 +1133,7 @@
               .map(
                 (sp) => `
         <div class="s-mini">
-          ${avatarHtml(sp, 40)}
+          ${avatarHtml(sp, 80)}
           <div><div class="s-name">${escHtml(sp.name)}</div><div class="s-role">${roleLine(sp)}</div></div>
         </div>`,
               )
