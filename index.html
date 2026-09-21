@@ -154,6 +154,7 @@ layout: null
            display: flex;
            align-items: flex-start;
            justify-content: center;
+           overflow: hidden;
            background-color: var(--dark-blue);
            background-image: url("src/hero-vegas-blue-fill.svg");
            background-repeat: no-repeat;
@@ -168,6 +169,7 @@ layout: null
       (a plain outline can't be filled, since it paints over whatever sits
       behind the box, so this uses two real nested boxes instead). */
          .hero-box-frame {
+           position: relative;
            max-width: 764px;
            width: 100%;
            margin: 0 auto;
@@ -178,6 +180,64 @@ layout: null
            box-shadow:
              0 0 12px rgba(255, 202, 0, 0.6),
              0 0 26px rgba(255, 202, 0, 0.3);
+         }
+         /* Dewy sits just right of the hero text box, standing in the
+      foreground at the bottom of the hero band — pinned low enough that
+      .hero-band's overflow:hidden crops off its bottom ~5%, like it's
+      planted right at the edge of frame. The source gif (dewy-hero-bonk.gif)
+      is pre-cropped to its actual character bounds with a small margin, so
+      the bottom offset only needs to cover that margin plus the ~5% crop
+      (no more guessing past a huge transparent canvas). Positioned relative
+      to .hero-band (not the box) so it pins to the whole hero, not just the
+      box frame; the box is centered and capped at 764px wide once Dewy is
+      shown, so its right edge is a fixed calc() from band center. Only
+      shown once the hero band is wide enough that Dewy's width + gap fits
+      beside the (max-width) box without overflowing the band. */
+         .hero-dewy {
+           display: none;
+           position: absolute;
+           left: calc(50% + 382px + 24px);
+           bottom: -29px;
+           width: 200px;
+           height: auto;
+           pointer-events: none;
+         }
+         /* A real element (not a border) so it paints in its own stacking
+      layer above the background artwork AND above Dewy, instead of sitting
+      behind Dewy where a plain border-bottom on .hero-band would land. */
+         .hero-bottom-stroke {
+           position: absolute;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           height: 2px;
+           background: var(--teal);
+           z-index: 5;
+           pointer-events: none;
+         }
+         /* Desktop + Responsive (1150px+): Dewy stands beside the box, per
+      the left calc() above — that formula always starts 24px clear of the
+      frame's right edge, so it structurally can't overlap the box/text no
+      matter how the gap beside the box shrinks as the viewport narrows. */
+         @media (min-width: 1150px) {
+           .hero-dewy {
+             display: block;
+           }
+         }
+         /* Compact and Mobile (<1150px): the box is close to (or exactly)
+      full-width here, so there's no side gap left to stand in — move Dewy
+      below/center instead of beside the box. The extra band padding-bottom
+      below carves out standing room so Dewy's full height clears the box's
+      bottom edge instead of overlapping the text/buttons. */
+         @media (max-width: 1149px) {
+           .hero-band {
+             padding-bottom: 220px;
+           }
+           .hero-dewy {
+             display: block;
+             left: 50%;
+             transform: translateX(-50%);
+           }
          }
          /* Marching-ants border — chasing dashes around the perimeter, like a
       theater/marquee sign. Border is transparent (kept only to hold the box
@@ -1008,6 +1068,8 @@ layout: null
           </div>
         </div>
       </div>
+      <img class="hero-dewy" src="src/dewy-hero-bonk.gif" alt="" />
+      <div class="hero-bottom-stroke"></div>
     </header>
 
     <!-- AGENDA (rendered by JS — see SESSIONS below) -->
