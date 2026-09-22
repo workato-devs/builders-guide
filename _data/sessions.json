@@ -213,8 +213,8 @@
     "end": "15:30",
     "timeLabel": "2:45 PM – 3:30 PM",
     "topic": "Learn",
-    "title": "AWS Partner Demo: Details Coming Soon",
-    "desc": "Join Sampath Kathirvel from AWS and Workato for a technical demo. The topic, presenter, and practical takeaway will be announced soon.",
+    "title": "Powering Agentic Workflows with AWS and Workato",
+    "desc": "This demo introduces Amazon Quick, AWS's agentic AI workspace that unifies research, business intelligence, and automation and connects to 1,000+ apps, including Workato, via MCP and OpenAPI.",
     "url": "https://web.cvent.com/hub/events/7801b76b-621b-42a4-ac7b-7d7e9405a9b1/sessions/a76451d5-d13b-4a86-a75f-a90f3dfa80f2?autoPlay=false",
     "speakers": [
       {
@@ -239,9 +239,9 @@
     "speakers": [
       {
         "name": "Aaron Weiss",
-        "role": "Community Lead",
-        "company": "Workato",
-        "photo": "src/portrait-aaron.png"
+        "role": "",
+        "company": "",
+        "photo": ""
       }
     ]
   }
