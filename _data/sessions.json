@@ -12,10 +12,10 @@
     "url": "https://web.cvent.com/hub/events/7801b76b-621b-42a4-ac7b-7d7e9405a9b1/sessions/75b70332-86e7-4c24-a708-77c9f0cdd077?autoPlay=false",
     "speakers": [
       {
-        "name": "Aaron Weiss",
-        "role": "Community Lead",
+        "name": "Workato Developers Team",
+        "role": "",
         "company": "Workato",
-        "photo": "src/portrait-aaron.png"
+        "photo": "src/avatar-dewy-networking.png"
       }
     ]
   },
